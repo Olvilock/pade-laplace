@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{10d57f0d-6713-4841-ab74-fb327b177c1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{e538aba4-3b92-47bf-88f9-6cc0b528bca2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="headers\kernelTransformSplines.cuh" />
+    <ClInclude Include="headers\TransformSplines.cuh" />
+    <ClInclude Include="headers\getSpline.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="src\kernelTransformSplines.cu" />
+    <CudaCompile Include="src\TransformSplines.cu" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="src\getSpline.cpp" />
+  </ItemGroup>
+</Project>

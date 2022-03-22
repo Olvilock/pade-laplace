@@ -1,0 +1,71 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Laplace Transform", "Laplace Transform\Laplace Transform.vcxproj", "{52D4C93A-8973-486F-A45F-A93897652BE9}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CBD0E755-F60E-4B0D-A33F-009B9F55E728} = {CBD0E755-F60E-4B0D-A33F-009B9F55E728}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Wrapper", "Wrapper\Wrapper.vcxproj", "{53B97F0A-6159-474A-ABB9-2C63ECCF062C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{CBD0E755-F60E-4B0D-A33F-009B9F55E728} = {CBD0E755-F60E-4B0D-A33F-009B9F55E728}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pade-Laplace Solver", "Solver\Solver.vcxproj", "{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{52D4C93A-8973-486F-A45F-A93897652BE9} = {52D4C93A-8973-486F-A45F-A93897652BE9}
+		{CBD0E755-F60E-4B0D-A33F-009B9F55E728} = {CBD0E755-F60E-4B0D-A33F-009B9F55E728}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Interpolation", "Interpolation\Interpolation.vcxproj", "{CBD0E755-F60E-4B0D-A33F-009B9F55E728}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{52D4C93A-8973-486F-A45F-A93897652BE9}.Debug|x64.ActiveCfg = Debug|x64
+		{52D4C93A-8973-486F-A45F-A93897652BE9}.Debug|x64.Build.0 = Debug|x64
+		{52D4C93A-8973-486F-A45F-A93897652BE9}.Debug|x86.ActiveCfg = Debug|x64
+		{52D4C93A-8973-486F-A45F-A93897652BE9}.Debug|x86.Build.0 = Debug|x64
+		{52D4C93A-8973-486F-A45F-A93897652BE9}.Release|x64.ActiveCfg = Release|x64
+		{52D4C93A-8973-486F-A45F-A93897652BE9}.Release|x64.Build.0 = Release|x64
+		{52D4C93A-8973-486F-A45F-A93897652BE9}.Release|x86.ActiveCfg = Release|x64
+		{52D4C93A-8973-486F-A45F-A93897652BE9}.Release|x86.Build.0 = Release|x64
+		{53B97F0A-6159-474A-ABB9-2C63ECCF062C}.Debug|x64.ActiveCfg = Debug|x64
+		{53B97F0A-6159-474A-ABB9-2C63ECCF062C}.Debug|x64.Build.0 = Debug|x64
+		{53B97F0A-6159-474A-ABB9-2C63ECCF062C}.Debug|x86.ActiveCfg = Debug|Win32
+		{53B97F0A-6159-474A-ABB9-2C63ECCF062C}.Debug|x86.Build.0 = Debug|Win32
+		{53B97F0A-6159-474A-ABB9-2C63ECCF062C}.Release|x64.ActiveCfg = Release|x64
+		{53B97F0A-6159-474A-ABB9-2C63ECCF062C}.Release|x64.Build.0 = Release|x64
+		{53B97F0A-6159-474A-ABB9-2C63ECCF062C}.Release|x86.ActiveCfg = Release|Win32
+		{53B97F0A-6159-474A-ABB9-2C63ECCF062C}.Release|x86.Build.0 = Release|Win32
+		{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}.Debug|x64.ActiveCfg = Debug|x64
+		{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}.Debug|x64.Build.0 = Debug|x64
+		{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}.Debug|x86.ActiveCfg = Debug|x64
+		{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}.Debug|x86.Build.0 = Debug|x64
+		{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}.Release|x64.ActiveCfg = Release|x64
+		{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}.Release|x64.Build.0 = Release|x64
+		{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}.Release|x86.ActiveCfg = Release|x64
+		{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}.Release|x86.Build.0 = Release|x64
+		{CBD0E755-F60E-4B0D-A33F-009B9F55E728}.Debug|x64.ActiveCfg = Debug|x64
+		{CBD0E755-F60E-4B0D-A33F-009B9F55E728}.Debug|x64.Build.0 = Debug|x64
+		{CBD0E755-F60E-4B0D-A33F-009B9F55E728}.Debug|x86.ActiveCfg = Debug|Win32
+		{CBD0E755-F60E-4B0D-A33F-009B9F55E728}.Debug|x86.Build.0 = Debug|Win32
+		{CBD0E755-F60E-4B0D-A33F-009B9F55E728}.Release|x64.ActiveCfg = Release|x64
+		{CBD0E755-F60E-4B0D-A33F-009B9F55E728}.Release|x64.Build.0 = Release|x64
+		{CBD0E755-F60E-4B0D-A33F-009B9F55E728}.Release|x86.ActiveCfg = Release|Win32
+		{CBD0E755-F60E-4B0D-A33F-009B9F55E728}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {100EAB83-0402-499B-BD94-ABF0F1384A17}
+	EndGlobalSection
+EndGlobal
