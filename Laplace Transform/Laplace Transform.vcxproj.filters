@@ -9,12 +9,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headers\kernelTransformSplines.cuh" />
     <ClInclude Include="headers\TransformSplines.cuh" />
     <ClInclude Include="headers\getSpline.h" />
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="src\kernelTransformSplines.cu" />
     <CudaCompile Include="src\TransformSplines.cu" />
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,7 @@ VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Laplace Transform", "Laplace Transform\Laplace Transform.vcxproj", "{52D4C93A-8973-486F-A45F-A93897652BE9}"
 	ProjectSection(ProjectDependencies) = postProject
+		{2E6E8726-98E7-41C5-8766-920834461E25} = {2E6E8726-98E7-41C5-8766-920834461E25}
 		{CBD0E755-F60E-4B0D-A33F-009B9F55E728} = {CBD0E755-F60E-4B0D-A33F-009B9F55E728}
 	EndProjectSection
 EndProject
@@ -13,13 +14,16 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Wrapper", "Wrapper\Wrapper.
 		{CBD0E755-F60E-4B0D-A33F-009B9F55E728} = {CBD0E755-F60E-4B0D-A33F-009B9F55E728}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pade-Laplace Solver", "Solver\Solver.vcxproj", "{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pade Solver", "Solver\Solver.vcxproj", "{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}"
 	ProjectSection(ProjectDependencies) = postProject
+		{2E6E8726-98E7-41C5-8766-920834461E25} = {2E6E8726-98E7-41C5-8766-920834461E25}
 		{52D4C93A-8973-486F-A45F-A93897652BE9} = {52D4C93A-8973-486F-A45F-A93897652BE9}
 		{CBD0E755-F60E-4B0D-A33F-009B9F55E728} = {CBD0E755-F60E-4B0D-A33F-009B9F55E728}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Interpolation", "Interpolation\Interpolation.vcxproj", "{CBD0E755-F60E-4B0D-A33F-009B9F55E728}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Numerics", "Numerics\Numerics.vcxproj", "{2E6E8726-98E7-41C5-8766-920834461E25}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,6 +65,14 @@ Global
 		{CBD0E755-F60E-4B0D-A33F-009B9F55E728}.Release|x64.Build.0 = Release|x64
 		{CBD0E755-F60E-4B0D-A33F-009B9F55E728}.Release|x86.ActiveCfg = Release|Win32
 		{CBD0E755-F60E-4B0D-A33F-009B9F55E728}.Release|x86.Build.0 = Release|Win32
+		{2E6E8726-98E7-41C5-8766-920834461E25}.Debug|x64.ActiveCfg = Debug|x64
+		{2E6E8726-98E7-41C5-8766-920834461E25}.Debug|x64.Build.0 = Debug|x64
+		{2E6E8726-98E7-41C5-8766-920834461E25}.Debug|x86.ActiveCfg = Debug|x64
+		{2E6E8726-98E7-41C5-8766-920834461E25}.Debug|x86.Build.0 = Debug|x64
+		{2E6E8726-98E7-41C5-8766-920834461E25}.Release|x64.ActiveCfg = Release|x64
+		{2E6E8726-98E7-41C5-8766-920834461E25}.Release|x64.Build.0 = Release|x64
+		{2E6E8726-98E7-41C5-8766-920834461E25}.Release|x86.ActiveCfg = Release|x64
+		{2E6E8726-98E7-41C5-8766-920834461E25}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
