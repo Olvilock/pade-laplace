@@ -18,14 +18,16 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\codegen.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="data\N1D1i2T2ms.padelpldata">
       <Filter>Resource Files</Filter>
     </None>
     <None Include="data\e-1.padelpldata" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\codegen.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

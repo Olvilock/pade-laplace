@@ -21,27 +21,33 @@
 
 int main()
 {
-	std::vector<thrust::complex<double> > poly
+	using complex = thrust::complex<double>;
+
+	std::vector<complex> poly
 	{
-		{ -36.0, 0.0 },
+		{ 4.0, 0.0 },
 		{ 0.0, 0.0 },
-		{ 5.0, 0.0 },
+		{ -5.0, 0.0 },
 		{ 0.0, 0.0 },
 		{ 1.0, 0.0 },
 	};
 
-	std::vector<thrust::complex<double> > roots
+	std::vector<complex> roots
 	{
-		{ 0.1, 0.0 },
-		{ 0.0, 0.1 },
-		{ -0.1, 0.0 },
-		{ 0.0, -0.1 }
+		{ 1.0, 0.0 },
+		{ 0.0, 1.0 },
+		{ -1.0, 0.0 },
+		{ 0.0, -1.0 },
 	};
 
-	thrust::device_vector<thrust::complex<double> > d_roots = roots;
+	thrust::device_vector<complex> d_roots = roots;
+	thrust::device_vector<complex> d_poly = poly;
+
+	thrust::device_vector<const complex*> c_polies(1, d_poly.data().get());
+	thrust::device_vector<complex*> c_roots(1, d_roots.data().get());
 
 	std::cout << "Solution started\n";
-	solve::Aberth(poly, roots.size(), d_roots);
+	solve::Aberth(c_polies, roots.size(), c_roots);
 	cudaDeviceSynchronize();
 	cudaCheckErrors("Kernel failed\n");
 

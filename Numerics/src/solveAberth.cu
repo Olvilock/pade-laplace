@@ -11,21 +11,17 @@ namespace solve
 	{
 		using complex = thrust::complex<double>;
 
-		__global__ void kernelAberth(const complex* polies, complex* solutions,
-									 double abs, double eps);
+		__global__ void kernelAberth(const complex* const* polies, complex* const* roots,
+									 double abs, double eps, double rot);
 	}
 
-	void Aberth(const thrust::device_vector<complex>& polies, unsigned degree,
-					  thrust::device_vector<complex>& roots,
-				double absolute, double epsilon)
+	void Aberth(const thrust::device_vector<const complex*>& polies, unsigned degree,
+				const thrust::device_vector<complex*>& roots,
+				double absolute, double delta, double rotation)
 	{
-		assert(polies.size() % (degree + 1) == 0);
-		assert(roots.size() % degree == 0);
-		assert(polies.size() / (degree + 1) == roots.size() / degree);
-
-		kernelAberth <<< roots.size() / degree, degree,
-						(degree * 2 + 1) * sizeof(complex) >>>
-			(polies.data().get(), roots.data().get(), absolute, epsilon);
+		assert(polies.size() == roots.size());
+		kernelAberth <<< roots.size(), degree, (degree * 2 + 1) * sizeof(complex) >>>
+			(polies.data().get(), roots.data().get(), absolute, delta, rotation);
 	}
 
 	namespace
@@ -39,7 +35,7 @@ namespace solve
 		__device__
 		Eval evaluate(complex point)
 		{
-			extern __shared__ complex poly[];
+			extern __shared__ complex lc_poly[];
 
 			complex exp_val = { 1.0 }, value = point;
 			for (int exp = 1; exp < blockDim.x; exp <<= 1)
@@ -53,16 +49,16 @@ namespace solve
 			complex prime{};
 			for (int id = threadIdx.x + 1; ; ++id)
 			{
-				prime += id * poly[id] * exp_val;
+				prime += id * lc_poly[id] * exp_val;
 
 				exp_val *= point;
-				value += poly[id] * exp_val;
+				value += lc_poly[id] * exp_val;
 
 				if (id == blockDim.x)
 				{
 					id = 0;
 					exp_val = { 1.0 };
-					value += poly[0];
+					value += lc_poly[0];
 				}
 				if (id == threadIdx.x)
 					break;
@@ -71,46 +67,48 @@ namespace solve
 			return { value, prime };
 		}
 
-		__global__ void kernelAberth(const complex* polies, complex* solutions,
-									 double abs, double eps)
+		__global__ void kernelAberth(const complex* const* polies, complex* const* roots,
+									 double abs, double eps, double rot)
 		{
-			int local_id = threadIdx.x;
-			int global_id = threadIdx.x + (blockDim.x + 1) * blockIdx.x;
+			const complex* glb_poly = polies[blockIdx.x];
+			complex* glb_roots = roots[blockIdx.x];
 
-			polies += global_id;
-			solutions += global_id;
+			extern __shared__ complex lc_poly[];
+			lc_poly[threadIdx.x] = glb_poly[threadIdx.x];
+			if (!threadIdx.x)
+				lc_poly[blockDim.x] = glb_poly[blockDim.x];
 
-			extern __shared__ complex poly[];
-			poly[local_id] = *polies;
-			if (!local_id)
-				poly[blockDim.x] = polies[blockDim.x];
+			complex* lc_roots = lc_poly + blockDim.x + 1;
+			complex root = glb_roots[threadIdx.x];
 
-			complex* sols = poly + blockDim.x + 1;
-			complex sol = *solutions;
-			__syncthreads();
-
-			for (int it = 0; it != 30; ++it)
+			for (int it = 0; it != 100; ++it)
 			{
-				Eval eval = evaluate(sol);
+				Eval eval = evaluate(root);
 				if (thrust::abs(eval.value) < min(abs, eps * thrust::abs(eval.prime)))
-					break;
+				{
+					glb_roots[threadIdx.x] = root;
+					return;
+				}
 
-				sols[local_id] = sol;
+				lc_roots[threadIdx.x] = root;
 				__syncthreads();
 
 				complex delta = eval.prime / eval.value;
-				for (int id = local_id + 1; ; ++id)
+				for (int id = threadIdx.x + 1; ; ++id)
 				{
 					if (id == blockDim.x)
 						id = 0;
-					if (id == local_id)
+					if (id == threadIdx.x)
 						break;
 
-					delta += 1.0 / (sols[id] - sol);
+					delta += 1.0 / (lc_roots[id] - root);
 				}
-				sol -= 1.0 / delta;
+				root -= complex{ 1.0, eps } / delta;
 			}
-			*solutions = sol;
+
+			printf("Aberth: fallthrough (divergence) at thread %i\n",
+				threadIdx.x + blockDim.x * blockIdx.x);
+			__trap();
 		}
 	}
 }

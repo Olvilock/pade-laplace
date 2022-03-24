@@ -171,10 +171,9 @@
     <None Include="data\N1D1i2T2ms.padelpldata" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\codegen.cpp">
+    <ClInclude Include="src\codegen.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
+    </ClInclude>
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
