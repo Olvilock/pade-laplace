@@ -17,7 +17,7 @@ namespace pl
 	double getRealBound(const dataset_type& data)
 	{
 		auto less_value = [](const it::Point& a, const it::Point& b)
-					{ return a.value < b.value; };
+					{ return std::abs(a.value) < std::abs(b.value); };
 
 		auto it = std::max_element(data.begin(), data.end(), less_value);
 		return 0.0;
@@ -42,9 +42,13 @@ namespace pl
 			{ 2.0, 1.0 },
 			{ 3.0, 1.0 },
 			{ 4.0, 1.0 },
-			{ 5.0, 1.0 }
+			{ 5.0, 1.0 },
+			{ 1.0, 0.0 },
+			{ 2.0, 0.0 },
+			{ 3.0, 0.0 },
+			{ 4.0, 0.0 },
+			{ 5.0, 0.0 }
 		};
-
 		std::cout << "Transforming...\n";
 		thrust::host_vector<thrust::complex<double>> result = laplace.transformGrid(points);
 

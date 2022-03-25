@@ -16,7 +16,7 @@ namespace it
 {
 	struct Cubic
 	{
-		double a, b, c, d;
+		std::complex<double> a, b, c, d;
 	};
 
 	struct Spline
@@ -25,7 +25,7 @@ namespace it
 		using vertices_type = std::vector<double>;
 
 		explicit Spline(const std::vector<Point>& data);
-		double operator () (double point) const;
+		std::complex<double> operator () (double point) const;
 
 		const storage_type& get_spline() const&;
 		storage_type&& get_spline() &&;

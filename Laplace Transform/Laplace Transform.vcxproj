@@ -13,9 +13,11 @@
   <ItemGroup>
     <ClInclude Include="headers\getSpline.h" />
     <ClInclude Include="headers\TransformSplines.cuh" />
+    <ClInclude Include="headers\TransformTrapezia.cuh" />
   </ItemGroup>
   <ItemGroup>
     <CudaCompile Include="src\TransformSplines.cu" />
+    <CudaCompile Include="src\TransformTrapezia.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\getSpline.cpp" />

@@ -12,11 +12,13 @@ namespace lpl
     namespace
     {
         __global__
-        void kernelTransformSplines(const it::Cubic* polies, size_t polies_count,
-                const double* vertices,
-                const thrust::complex<double>* grid, size_t grid_size,
-                thrust::complex<double>* res_grid);
+        void kernelTransformSplines(const Cubic* polies, unsigned polies_count,
+                    const double* vertices,
+                    const thrust::complex<double>* grid, unsigned grid_size,
+                    thrust::complex<double>* res_grid);
     }
+    Cubic::Cubic(const it::Cubic& ic):
+        a(ic.a), b(ic.b), c(ic.c), d(ic.d) {}
 
 	TransformSplines::TransformSplines(spline_type spline, dataset_type vertices) :
 		m_spline(std::move(spline)), m_vertices(std::move(vertices))
@@ -46,12 +48,12 @@ namespace lpl
 	namespace
 	{
         __global__
-        void kernelTransformSplines(const it::Cubic* polies, size_t polies_count,
-                const double* vertices,
-                const thrust::complex<double>* grid, size_t grid_size,
-                thrust::complex<double>* res_grid)
+        void kernelTransformSplines(const Cubic* polies, unsigned polies_count,
+                    const double* vertices,
+                    const thrust::complex<double>* grid, unsigned grid_size,
+                    thrust::complex<double>* res_grid)
         {
-            size_t id = threadIdx.x + (size_t)blockIdx.x * blockDim.x;
+            unsigned id = threadIdx.x + blockIdx.x * blockDim.x;
             if (id >= grid_size)
                 return;
             if (!polies_count)
@@ -67,19 +69,19 @@ namespace lpl
                 result = {};
             while (polies_count--)
             {
-                it::Cubic poly = *polies++;
+                Cubic poly = *polies++;
                 double delta = vertex - (vertex = *vertices++);
 
                 result += coeff * (
                     poly.a + delta * (poly.b + delta * (poly.c + delta * poly.d))
-                    + (poly.b + delta * (poly.c * 2 + delta * poly.d * 3)) / s
-                    + (poly.c * 2 + (delta + 1 / s) * poly.d * 6) / (s * s));
+                    + (poly.b + delta * (2.0 * poly.c + 3.0 * delta * poly.d)) / s
+                    + (2.0 * poly.c + (6.0 * delta + 6.0 / s) * poly.d) / (s * s));
 
                 coeff = thrust::exp(-s * vertex) / s;
 
                 result -= coeff * (poly.a
-                    + (poly.b + (poly.c * 2 +
-                        poly.d * 6 / s) / s) / s);
+                    + (poly.b + (2.0 * poly.c +
+                        6.0 * poly.d / s) / s) / s);
             }
             res_grid[id] = result;
         }

@@ -3,14 +3,14 @@
 #ifdef __CUDACC__
 
 #include <Point.h>
-#include <vector>
 #include <complex>
+#include <vector>
 
 #else
 
+import <Point.h>;
 import <complex>;
 import <vector>;
-import <Point.h>;
 
 #endif
 

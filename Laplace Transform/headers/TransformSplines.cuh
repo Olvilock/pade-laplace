@@ -8,9 +8,17 @@
 
 namespace lpl
 {
+    struct Cubic
+    {
+        thrust::complex<double> a, b, c, d;
+
+        __host__ __device__
+            Cubic(const it::Cubic&);
+    };
+
     struct TransformSplines
     {
-        using spline_type = thrust::device_vector<it::Cubic>;
+        using spline_type = thrust::device_vector<Cubic>;
         using dataset_type = thrust::device_vector<double>;
         using grid_type = thrust::device_vector<thrust::complex<double> >;
 

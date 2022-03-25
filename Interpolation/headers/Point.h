@@ -1,10 +1,12 @@
 #pragma once
 
+#include <complex>
+
 namespace it
 {
 	struct Point
 	{
 		double point;
-		double value;
+		std::complex<double> value;
 	};
 }

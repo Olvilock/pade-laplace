@@ -1,11 +1,13 @@
 export module Spline:ThomasMethod;
 
+import <complex>;
 import <array>;
 import <vector>;
 
 export namespace it
 {
-	std::vector<double> ThomasMethod(std::vector<std::array<double, 4> > coeff)
+	std::vector<std::complex<double> > ThomasMethod
+		(std::vector<std::array<std::complex<double>, 4> > coeff)
 	{
 		for (std::size_t i = 1; i < coeff.size(); ++i)
 		{
@@ -16,7 +18,7 @@ export namespace it
 			F -= omega * Fp;
 		}
 
-		std::vector<double> result(coeff.size());
+		std::vector<std::complex<double> > result(coeff.size());
 
 		auto coeff_it = coeff.rbegin();
 		auto result_it = result.rbegin();

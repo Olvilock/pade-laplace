@@ -15,7 +15,7 @@ export namespace it
 	Spline::Spline(const std::vector<Point>& data) :
 		m_vertices(data.size() - 1), m_spline(data.size() - 1)
 	{
-		std::vector<std::array<double, 4> > forThomas(data.size());
+		std::vector<std::array<std::complex<double>, 4> > forThomas(data.size());
 		forThomas.front()[1] = forThomas.back()[1] = 1.0;
 
 		{
@@ -26,9 +26,9 @@ export namespace it
 				forThomas[i] =
 				{
 					pred_diff,
-					2 * (cur_diff + pred_diff),
+					2.0 * (cur_diff + pred_diff),
 					cur_diff,
-					3 * ((data[i + 1].value - data[i].value) / cur_diff -
+					3.0 * ((data[i + 1].value - data[i].value) / cur_diff -
 							(data[i].value - data[i - 1].value) / pred_diff)
 				};
 				pred_diff = cur_diff;
@@ -44,14 +44,14 @@ export namespace it
 			{
 				data[i].value,
 				(data[i].value - data[i - 1].value) / adj_diff +
-					(2 * squareCoeff[i] + squareCoeff[i - 1]) * adj_diff / 3,
+					(2.0 * squareCoeff[i] + squareCoeff[i - 1]) * adj_diff / 3.0,
 				squareCoeff[i],
-				(squareCoeff[i] - squareCoeff[i - 1]) / (3 * adj_diff)
+				(squareCoeff[i] - squareCoeff[i - 1]) / (3.0 * adj_diff)
 			};
 		}
 	}
 
-	double Spline::operator () (double point) const
+	std::complex<double> Spline::operator () (double point) const
 	{
 		if (point > m_vertices.back())
 			return {};
