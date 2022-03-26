@@ -8,6 +8,8 @@
 
 namespace lpl
 {
+    constexpr int splineDim = 3;
+
     struct SplineSegment
     {
         double right;

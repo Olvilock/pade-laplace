@@ -52,7 +52,8 @@ namespace lpl
 	{
 		grid_type result(grid.size() * depth);
 
-		kernelTransformSplines <<< grid.size(), depth, depth * sizeof(double) >>>
+		kernelTransformSplines <<< grid.size(), depth,
+                                  (depth + splineDim) * sizeof(double) >>>
 			(m_spline.data().get(), m_spline.size(), m_leftEnd, m_rightEnd,
 			 grid.data().get(), result.data().get());
 
@@ -61,34 +62,39 @@ namespace lpl
 
 	namespace
 	{
-        __device__ void get_exp(double base)
+        __device__ void get_exp(double base, unsigned id)
         {
             extern __shared__ double exp_val[];
-            exp_val[threadIdx.x] = 1.0;
+            exp_val[id] = 1.0;
 
-            for (int exp = 1; exp < blockDim.x; exp <<= 1)
+            for (int cur_exp = 1; cur_exp <= id; cur_exp <<= 1)
             {
-                if (exp & threadIdx.x)
-                    exp_val[threadIdx.x] *= base;
+                if (cur_exp & id)
+                    exp_val[id] *= base;
                 base *= base;
             }
         }
         __device__ thrust::complex<double> get_coeff(
-            thrust::complex<double> s, double mt)
+            thrust::complex<double> s, double t, unsigned offset)
         {
             extern __shared__ double exp[];
-            get_exp(mt);
 
-            thrust::complex<double>
-                coeff = { 1.0 },
-                result = exp[threadIdx.x];
-            for (int i = threadIdx.x; i; )
+            for (unsigned id = threadIdx.x;
+                    id < blockDim.x + offset;
+                    id += blockDim.x)
+                get_exp(t, id);
+
+            offset += threadIdx.x;
+            auto coeff = thrust::exp(-t * s) / s,
+                result = exp[offset] * coeff;
+
+            while (offset)
             {
-                coeff *= -i-- / s;
-                result += coeff * exp[i];
+                coeff *= offset-- / s;
+                result += coeff * exp[offset];
             }
 
-            return result * thrust::exp(mt * s);
+            return (1 - 2 * (threadIdx.x % 2)) * result;
         }
 
         __global__ void kernelTransformSplines (
@@ -100,7 +106,7 @@ namespace lpl
             thrust::complex<double>* res_grid )
         {
             const auto glb_id = threadIdx.x + blockDim.x * blockIdx.x;
-            const auto lc_id = threadIdx.x;
+            const auto grid_id = blockIdx.x;
 
             if (!segments_count)
             {
@@ -108,25 +114,25 @@ namespace lpl
                 return;
             }
 
+            auto s = grid[grid_id];
             auto segment = *segments++;
-            thrust::complex<double>
-                s = grid[blockIdx.x],
-                coeff_s_powm4 = 6//(lc_id + 1) * (lc_id + 2) * (lc_id + 3)
-                              / ((s * s) * (s * s)),
-                result = get_coeff(s, -segment.right) *
-                    (left.value + (lc_id + 1) * left.slope / s) / s;
-
+            auto result =
+                get_coeff(s, segment.right, 0) * left.value +
+                get_coeff(s, segment.right, 1) * left.slope;
+            
             while (--segments_count)
             {
                 auto old_segment = segment;
                 segment = *segments++;
-                result += get_coeff(s, -old_segment.right) *
-                    (segment.cubic - old_segment.cubic) * coeff_s_powm4;
+                result +=
+                    get_coeff(s, old_segment.right, splineDim) *
+                        (segment.cubic - old_segment.cubic);
             }
-            
-            result -= get_coeff(s, -segment.right) *
-                ( (right.value + (lc_id + 1) * right.slope / s) / s
-                    - segment.cubic * coeff_s_powm4);
+
+            result -=
+                get_coeff(s, segment.right, 0) * right.value +
+                get_coeff(s, segment.right, 1) * right.slope +
+                get_coeff(s, segment.right, splineDim) * segment.cubic;
 
             res_grid[glb_id] = result;
         }
