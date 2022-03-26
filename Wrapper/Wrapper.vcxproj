@@ -167,13 +167,12 @@
     </CudaLink>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="data\e-1.padelpltxt" />
+    <None Include="data\e-1_10.padelpltxt" />
+    <None Include="data\e-1_100.padelpltxt" />
+    <None Include="data\e-1_1000.padelpltxt" />
     <None Include="data\N1D1i2T2ms.padelpltxt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\codegen.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>

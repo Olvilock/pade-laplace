@@ -31,7 +31,8 @@ namespace lpl
             auto delta = data[0].point - data[1].point;
             m_leftEnd = { front_seg.a +
                 delta * ( front_seg.b +
-                delta * ( front_seg.c + delta * front_seg.d)),
+                delta * ( front_seg.c +
+                delta * front_seg.d ) ),
 
                           front_seg.b +
                 delta * (2.0 * front_seg.c +
@@ -52,8 +53,7 @@ namespace lpl
 	{
 		grid_type result(grid.size() * depth);
 
-		kernelTransformSplines <<< grid.size(), depth,
-                                  (depth + splineDim) * sizeof(double) >>>
+		kernelTransformSplines <<< grid.size(), depth, depth * sizeof(double) >>>
 			(m_spline.data().get(), m_spline.size(), m_leftEnd, m_rightEnd,
 			 grid.data().get(), result.data().get());
 
@@ -62,39 +62,38 @@ namespace lpl
 
 	namespace
 	{
-        __device__ void get_exp(double base, unsigned id)
+        __device__ void set_pow(double base)
         {
-            extern __shared__ double exp_val[];
-            exp_val[id] = 1.0;
+            extern __shared__ double pow[];
+            pow[threadIdx.x] = 1.0;
 
-            for (int cur_exp = 1; cur_exp <= id; cur_exp <<= 1)
+            for (int exp = 1; exp < blockDim.x; exp <<= 1)
             {
-                if (cur_exp & id)
-                    exp_val[id] *= base;
+                if (exp & threadIdx.x)
+                    pow[threadIdx.x] *= base;
                 base *= base;
             }
         }
+
+        template <int offset>
         __device__ thrust::complex<double> get_coeff(
-            thrust::complex<double> s, double t, unsigned offset)
+            thrust::complex<double> s)
         {
-            extern __shared__ double exp[];
+            extern __shared__ double pow[];
 
-            for (unsigned id = threadIdx.x;
-                    id < blockDim.x + offset;
-                    id += blockDim.x)
-                get_exp(t, id);
+            auto coeff = 1 / s;
+            int next = 1;
+#pragma unroll
+            while (next <= offset)
+                coeff *= next++ / s;
 
-            offset += threadIdx.x;
-            auto coeff = thrust::exp(-t * s) / s,
-                result = exp[offset] * coeff;
-
-            while (offset)
+            auto result = coeff * pow[threadIdx.x];
+            for (int exp = threadIdx.x; exp; ++next)
             {
-                coeff *= offset-- / s;
-                result += coeff * exp[offset];
+                coeff *= -exp-- * next / ((next - offset) * s);
+                result += coeff * pow[exp];
             }
-
-            return (1 - 2 * (threadIdx.x % 2)) * result;
+            return result;
         }
 
         __global__ void kernelTransformSplines (
@@ -116,23 +115,28 @@ namespace lpl
 
             auto s = grid[grid_id];
             auto segment = *segments++;
-            auto result =
-                get_coeff(s, segment.right, 0) * left.value +
-                get_coeff(s, segment.right, 1) * left.slope;
+
+            set_pow(-segment.pivot);
+            auto exp = thrust::exp(-segment.pivot * s);
+            auto result = exp *
+                (   get_coeff<0>(s) * left.a +
+                    get_coeff<1>(s) * left.b );
             
             while (--segments_count)
             {
-                auto old_segment = segment;
+                auto old_cubic = segment.d;
                 segment = *segments++;
-                result +=
-                    get_coeff(s, old_segment.right, splineDim) *
-                        (segment.cubic - old_segment.cubic);
+                result += exp *
+                    get_coeff<3>(s) * (segment.d - old_cubic);
+
+                set_pow(-segment.pivot);
+                exp = thrust::exp(-segment.pivot * s);
             }
 
-            result -=
-                get_coeff(s, segment.right, 0) * right.value +
-                get_coeff(s, segment.right, 1) * right.slope +
-                get_coeff(s, segment.right, splineDim) * segment.cubic;
+            result -= exp *
+                (   get_coeff<0>(s) * right.a +
+                    get_coeff<1>(s) * right.b +
+                    get_coeff<3>(s) * segment.d );
 
             res_grid[glb_id] = result;
         }

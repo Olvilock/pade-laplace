@@ -17,6 +17,18 @@ int main(int argc, char* argv[])
 	if (argc != 2)
 	{
 		std::cout << "Usage: " << argv[0] << " {infile}\n";
+		
+		constexpr double step = 0.1;
+		std::ofstream fout("data/e-1_1000"s + extension);
+		fout << std::fixed << std::setprecision(10);
+
+		// data.reserve(101);
+		for (int i = 0; i != 1001; ++i)
+		{
+			fout << i * step << ' ' << std::exp(-i * step) << '\n';
+			// data.emplace_back(i * step, std::exp(-i * step));
+		}
+		
 		return EXIT_FAILURE;
 	}
 

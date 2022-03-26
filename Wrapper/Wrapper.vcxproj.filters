@@ -23,11 +23,8 @@
     <None Include="data\N1D1i2T2ms.padelpltxt">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="data\e-1.padelpltxt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="src\codegen.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
+    <None Include="data\e-1_1000.padelpltxt" />
+    <None Include="data\e-1_100.padelpltxt" />
+    <None Include="data\e-1_10.padelpltxt" />
   </ItemGroup>
 </Project>

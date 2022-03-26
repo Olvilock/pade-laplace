@@ -36,19 +36,19 @@ namespace pl
 							{ return a.point < b.point; };
 		thrust::sort(thrust::host, data.begin(), data.end(), less_point);
 
-		const int depth = 5;
+		const int depth = 11;
 		std::vector<thrust::complex<double> > points
 		{
-			{ -0.7, 0.0 },
-			{ -0.5, 0.0 },
-			{ 0.2, 0.0 },
-			{ 1.0, 0.0 },
-			{ 2.0, 0.0 },
-			{ 3.0, 0.0 },
-			{ 4.0, 0.0 },
-			{ 5.0, 0.0 },
-			{ 10.0, 0.0 },
-			{ 100.0, 0.0 }
+			{ -0.7, 1.0 },
+			{ -0.5, 0.1 },
+			{ 0.2, 1.0 },
+			{ 1.0, 0.1 },
+			{ 2.0, 1.0 },
+			{ 3.0, 0.1 },
+			{ 4.0, 1.0 },
+			{ 5.0, 0.1 },
+			{ 10.0, 1.0 },
+			{ 100.0, 0.1 }
 		};
 
 		std::cout << "Initializing Trapezia...\n";

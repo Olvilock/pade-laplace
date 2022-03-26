@@ -35,16 +35,16 @@ namespace lpl
 	namespace
 	{
 		__device__
-		double get_exp(double base)
+		double get_pow(double base)
 		{
-			double exp_val = 1.0;
+			double pow = 1.0;
 			for (int exp = 1; exp < blockDim.x; exp <<= 1)
 			{
 				if (exp & threadIdx.x)
-					exp_val *= base;
+					pow *= base;
 				base *= base;
 			}
-			return exp_val;
+			return pow;
 		}
 
 		__global__
@@ -61,21 +61,21 @@ namespace lpl
 
 				Point left = *points++;
 				thrust::complex<double>
-					left_exp = get_exp(-left.point) *
+					left_pow = get_pow(-left.point) *
 						   thrust::exp(-left.point * s);
 
 				while (--count)
 				{
 					Point right = *points++;
 					thrust::complex<double>
-						right_exp = get_exp(-right.point) *
+						right_pow = get_pow(-right.point) *
 								thrust::exp(-right.point * s);
 
 					result += 0.5 * (right.point - left.point) *
-						(left_exp * left.value + right_exp * right.value);
+						(left_pow * left.value + right_pow * right.value);
 
 					left = right;
-					left_exp = right_exp;
+					left_pow = right_pow;
 				}
 			}
 

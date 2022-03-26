@@ -8,18 +8,15 @@
 
 namespace lpl
 {
-    constexpr int splineDim = 3;
-
     struct SplineSegment
     {
-        double right;
-        thrust::complex<double> cubic;
+        double pivot;
+        thrust::complex<double> d;
     };
 
     struct SplineEndpoint
     {
-        thrust::complex<double> value;
-        thrust::complex<double> slope;
+        thrust::complex<double> a, b;
     };
 
     struct TransformSplines
