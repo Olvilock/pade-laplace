@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 	using namespace std::string_literals;
 	namespace fs = std::filesystem;
 
-	constexpr const char* extension = ".padelpldata";
+	constexpr const char* extension = ".padelpltxt";
 	
 	pl::dataset_type data;
 	if (argc != 2)
@@ -42,8 +42,19 @@ int main(int argc, char* argv[])
 	}
 
 	std::cout << "Dataset size is " << data.size() << '\n';
-
-	std::cout << std::fixed << std::setprecision(10);
+	/*
+	auto spline = it::Spline(data).get_spline();
+	for (std::size_t id = 1; id != data.size(); ++id)
+	{
+		auto x = data[id - 1].point - data[id].point;
+		auto& [a, b, c, d] = spline[id - 1];
+		std::cout << a + x * (b + x * (c + x * d)) << ' ';
+		std::cout << b + x * (2.0 * c + x * 3.0 * d) << ' ';
+		std::cout << 2.0 * c + 6.0 * x * d << ' ' << 6.0 * d << '\n';
+		std::cout << a << ' ' << b << ' ' << 2.0 * c << ' ' << 6.0 * d << '\n';
+	}
+	*/
+	std::cout << std::fixed << std::setprecision(6);
 	auto [result] = pl::approx(data);
 
 	std::system("pause");

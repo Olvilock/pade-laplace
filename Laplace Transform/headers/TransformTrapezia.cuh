@@ -14,11 +14,12 @@ namespace lpl
 		thrust::complex<double> value;
 
 		__host__ __device__
-		Point(const it::Point&);
+			Point(const it::Point&);
 	};
 
-	struct TransformTrapezia
+	class TransformTrapezia
 	{
+	public:
 		using dataset_type = thrust::device_vector<Point>;
 		using grid_type = thrust::device_vector<thrust::complex<double> >;
 

@@ -1,32 +1,34 @@
 #pragma once
 
-#include <Spline.h>
 #include <plFormat.h>
+#include <Spline.h>
 
 #include <thrust/device_vector.h>
 #include <thrust/complex.h>
 
 namespace lpl
 {
-    struct Cubic
+    struct SplineSegment
     {
-        thrust::complex<double> a, b, c, d;
+        double right;
+        thrust::complex<double> cubic;
+    };
 
-        __host__ __device__
-            Cubic(const it::Cubic&);
+    struct SplineEndpoint
+    {
+        thrust::complex<double> value;
+        thrust::complex<double> slope;
     };
 
     struct TransformSplines
     {
-        using spline_type = thrust::device_vector<Cubic>;
-        using dataset_type = thrust::device_vector<double>;
+        using dataset_type = thrust::device_vector<SplineSegment>;
         using grid_type = thrust::device_vector<thrust::complex<double> >;
 
-        TransformSplines(spline_type, dataset_type);
         TransformSplines(const pl::dataset_type&);
-        grid_type transformGrid(const grid_type& points) const;
+        grid_type transformGrid(const grid_type& points, unsigned depth) const;
     private:
-        spline_type m_spline;
-        dataset_type m_vertices;
+        dataset_type m_spline;
+        SplineEndpoint m_leftEnd, m_rightEnd;
     };
 }

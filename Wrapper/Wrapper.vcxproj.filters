@@ -20,10 +20,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="data\N1D1i2T2ms.padelpldata">
+    <None Include="data\N1D1i2T2ms.padelpltxt">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="data\e-1.padelpldata" />
+    <None Include="data\e-1.padelpltxt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\codegen.h">

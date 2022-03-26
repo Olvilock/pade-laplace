@@ -21,6 +21,7 @@ namespace it
 
 	struct Spline
 	{
+		using dataset_type = std::vector<Point>;
 		using storage_type = std::vector<Cubic>;
 		using vertices_type = std::vector<double>;
 

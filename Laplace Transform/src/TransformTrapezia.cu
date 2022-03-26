@@ -7,10 +7,10 @@ namespace lpl
 {
 	namespace
 	{
-		__global__
-		void kernelTransformTrapezia(const Point* points, unsigned count,
-									 const thrust::complex<double>* grid,
-									 thrust::complex<double>* res_grid);
+		__global__ void kernelTransformTrapezia (
+			const Point* points, unsigned count,
+			const thrust::complex<double>* grid,
+			thrust::complex<double>* res_grid );
 	}
 
 	Point::Point(const it::Point& ip) :
@@ -24,7 +24,6 @@ namespace lpl
 	{
 		grid_type result(grid.size() * depth);
 
-		constexpr int blk_size = 64;
 		kernelTransformTrapezia <<< grid.size(), depth >>>
 			(m_points.data().get(), m_points.size(),
 			 grid.data().get(),
@@ -49,26 +48,31 @@ namespace lpl
 		}
 
 		__global__
-		void kernelTransformTrapezia(const Point* points, unsigned count,
-									 const thrust::complex<double>* grid,
-									 thrust::complex<double>* res_grid)
+		void kernelTransformTrapezia (
+			const Point* points, unsigned count,
+			const thrust::complex<double>* grid,
+			thrust::complex<double>* res_grid )
 		{
-			thrust::complex<double>
-				s = grid[blockIdx.x],
-				result = {};
+			thrust::complex<double>	result = {};
 
 			if (count)
 			{
+				thrust::complex<double> s = grid[blockIdx.x];
+
 				Point left = *points++;
-				double left_exp = get_exp(-left.point);
+				thrust::complex<double>
+					left_exp = get_exp(-left.point) *
+						   thrust::exp(-left.point * s);
+
 				while (--count)
 				{
 					Point right = *points++;
-					double right_exp = get_exp(-right.point);
+					thrust::complex<double>
+						right_exp = get_exp(-right.point) *
+								thrust::exp(-right.point * s);
 
 					result += 0.5 * (right.point - left.point) *
-						( left_exp * left.value * thrust::exp(-s * left.point)
-						+ right_exp * right.value * thrust::exp(-s * right.point));
+						(left_exp * left.value + right_exp * right.value);
 
 					left = right;
 					left_exp = right_exp;
