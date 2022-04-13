@@ -11,10 +11,12 @@
 #include <thrust/sort.h>
 #include <thrust/execution_policy.h>
 
+#include <fstream>
 #include <iostream>
 #include <iomanip>
 #include <vector>
 #include <algorithm>
+#include <string>
 
 namespace pl
 {
@@ -22,21 +24,23 @@ namespace pl
 	{
 		double getRealBound(const dataset_type& data)
 		{
+			if (data.empty())
+				return 0.0;
+
 			auto less_value = [](const it::Point& a, const it::Point& b)
 						{ return std::abs(a.value) < std::abs(b.value); };
 
 			auto it = std::max_element(data.begin(), data.end(), less_value);
-			return 0.0;
+			
 		}
 	}
 
-	Approximation approx(dataset_type data)
+	Approximation approx(dataset_type data, unsigned depth)
 	{
 		auto less_point = [](const it::Point& a, const it::Point& b)
 							{ return a.point < b.point; };
 		thrust::sort(thrust::host, data.begin(), data.end(), less_point);
 
-		const int depth = 11;
 		std::vector<thrust::complex<double> > points
 		{
 			{ -0.7, 1.0 },
@@ -87,6 +91,7 @@ namespace pl
 			}
 			std::cout << "\n\n";
 		}
+
 		return { { { -1.0, 0.0 } } };
 	}
 }

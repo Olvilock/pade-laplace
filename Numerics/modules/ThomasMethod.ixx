@@ -4,7 +4,7 @@ import <complex>;
 import <array>;
 import <vector>;
 
-export namespace it
+export namespace numer
 {
 	std::vector<std::complex<double> > ThomasMethod
 		(std::vector<std::array<std::complex<double>, 4> > coeff)

@@ -1,12 +1,45 @@
+;
+		points.reserve(1000);
+		for (int i = 1; i < 1000; ++i)
+			points.emplace_back(i * 0.02);
+
+		using namespace std::string_literals;
+
+		std::vector<std::complex<double>> true_res(points.size());
+		for (std::size_t i = 0; i != points.size(); ++i)
+			true_res[i] = 1.0 / (points[i] + 1);
+		for (int d = 0; d < depth; ++d)
 		{
-			{ -0.7, 1.0 },
-			{ -0.5, 0.1 },
-			{ 0.2, 1.0 },
-			{ 1.0, 0.1 },
-			{ 2.0, 1.0 },
-			{ 3.0, 0.1 },
-			{ 4.0, 1.0 },
-			{ 5.0, 0.1 },
-			{ 10.0, 1.0 },
-			{ 100.0, 0.1 }
-		};
+			std::ofstream fout("values/"s + std::to_string(data.size() - 1) +
+								 "/order = "s + std::to_string(d) + ".txt"s);
+			// fout.precision(10);
+
+			for (std::size_t i = 0; i != points.size(); ++i)
+			{
+				fout << points[i].real() << ' ';
+				fout << true_res[i].real() << ' ';
+				fout << result_trapezia[i * depth + d].real() << ' ';
+				fout << result_splines[i * depth + d].real() << '\n';
+
+				true_res[i] *= -(d + 1) / (points[i] + 1);
+			}
+		}
+
+		for (std::size_t i = 0; i != points.size(); ++i)
+			true_res[i] = 1.0 / (points[i] + 1);
+		for (int d = 0; d < depth; ++d)
+		{
+			std::ofstream fout("relative errors/"s + std::to_string(data.size() - 1) +
+									  "/order = "s + std::to_string(d) + ".txt"s);
+			// fout.precision(10);
+
+			for (std::size_t i = 0; i != points.size(); ++i)
+			{
+				fout << points[i].real() << ' ';
+				fout << 0 << ' ';
+				fout << result_trapezia[i * depth + d].real() / true_res[i].real() - 1.0 << ' ';
+				fout << result_splines[i * depth + d].real() / true_res[i].real() - 1.0 << '\n';
+
+				true_res[i] *= -(d + 1) / (points[i] + 1);
+			}
+		}

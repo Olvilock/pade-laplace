@@ -12,7 +12,7 @@ import <vector>;
 
 #endif
 
-namespace it
+namespace numer
 {
 	struct Cubic
 	{

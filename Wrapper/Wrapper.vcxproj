@@ -79,6 +79,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <TargetName>$(SolutionName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -176,11 +177,8 @@
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Interpolation\Interpolation.vcxproj">
-      <Project>{cbd0e755-f60e-4b0d-a33f-009b9f55e728}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Laplace Transform\Laplace Transform.vcxproj">
-      <Project>{52d4c93a-8973-486f-a45f-a93897652be9}</Project>
+    <ProjectReference Include="..\Numerics\Numerics.vcxproj">
+      <Project>{2e6e8726-98e7-41c5-8766-920834461e25}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Solver\Solver.vcxproj">
       <Project>{1be38a13-3d45-42f4-b5ae-4beafd787d6f}</Project>

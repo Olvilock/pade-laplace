@@ -4,7 +4,8 @@ import <filesystem>;
 import <string>;
 
 import Spline;
-import <plApprox.h>;
+import <plFormat.h>;
+import <plBatchedSolver.h>;
 
 int main(int argc, char* argv[])
 {
@@ -18,7 +19,7 @@ int main(int argc, char* argv[])
 	{
 		std::cout << "Usage: " << argv[0] << " {infile}\n";
 		
-		constexpr double step = 0.1;
+		constexpr double step = 0.01;
 		std::ofstream fout("data/e-1_1000"s + extension);
 		fout << std::fixed << std::setprecision(10);
 
@@ -33,14 +34,15 @@ int main(int argc, char* argv[])
 	}
 
 	fs::path path = argv[1];
+	std::cout << "Opening " << path << '\n';
 	if (!exists(path))
 	{
-		std::cout << argv[1] << " does not exist!\n";
+		std::cout << path << " does not exist!\n";
 		return EXIT_FAILURE;
 	}
 	if (!is_regular_file(path) || path.extension() != extension)
 	{
-		std::cout << argv[1] << " is not a (suitable) file!\n";
+		std::cout << path << " is not a (suitable) file!\n";
 		return EXIT_FAILURE;
 	}
 
@@ -55,7 +57,7 @@ int main(int argc, char* argv[])
 
 	std::cout << "Dataset size is " << data.size() << '\n';
 	/*
-	auto spline = it::Spline(data).get_spline();
+	auto spline = numer::Spline(data).get_spline();
 	for (std::size_t id = 1; id != data.size(); ++id)
 	{
 		auto x = data[id - 1].point - data[id].point;
@@ -67,7 +69,9 @@ int main(int argc, char* argv[])
 	}
 	*/
 	std::cout << std::fixed << std::setprecision(6);
-	auto [result] = pl::approx(data);
+	
+	using namespace numer::laplace;
+	auto [result] = pl::solveBatched<transformType::Trapezia>(data, 64);
 
 	std::system("pause");
 }
