@@ -49,19 +49,19 @@ namespace pl
 			{ 3.0, 10.0 }
 		};
 		thrust::device_vector<thrust::complex<double> > d_grid = h_grid;
+		
+		thrust::device_vector<batchedResult> d_result(
+			d_grid.size() * depth * (depth + 1) / 2,
+			{ {}, batchedStatus::untouched });
 
 		complex* buffer;
 		cudaMalloc(&buffer,
 			d_grid.size() * depth * (depth + 1) * sizeof(complex));
 		cudaCheckErrors("Malloc failed\n");
 		
-		thrust::device_vector<batchedResult> d_result(
-			d_grid.size() * depth * (depth + 1) / 2,
-			{ {}, batchedStatus::untouched });
-		
 		cudaSetDeviceFlags(cudaDeviceScheduleBlockingSync);
 		cudaCheckErrors("Device error\n");
-		std::cout << "Kernel launch..." << std::endl;
+		std::cout << "Kernel launch...\n";
 		
 		kernelBatchedVecSolver<transformType::Trapezia, const Point*, unsigned>
 		<<< d_grid.size(), depth, 2 * depth * sizeof(complex) >>>
@@ -81,7 +81,7 @@ namespace pl
 		auto res_it = h_result.begin();
 		for (auto s : h_grid)
 		{
-			std::cout << "So for this point s = " << s << " we have:\n";
+			std::cout << "For point p = " << s << " we have:\n";
 			for (int count = 1; count <= depth; res_it += count++)
 			{
 				std::cout << "count = " << count << ":\n";
@@ -98,8 +98,8 @@ namespace pl
 						std::cout << "(ok)";
 					
 					auto data = (*cur_it).data;
-					std::cout << "  " << data.amp <<
-								  " " << data.exp << "\n";
+					std::cout << "  a_" << id << " = " << data.amp <<
+								 ", b_" << id << " = " << data.exp << "\n";
 				}
 			}
 		}

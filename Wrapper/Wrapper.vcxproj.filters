@@ -27,4 +27,7 @@
     <None Include="data\e-1_100.padelpltxt" />
     <None Include="data\e-1_10.padelpltxt" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="data\RC-CR.padelpltxt" />
+  </ItemGroup>
 </Project>

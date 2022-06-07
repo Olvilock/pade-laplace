@@ -52,7 +52,7 @@ int main(int argc, char* argv[])
 		fin >> point >> value;
 		if (!fin.good())
 			break;
-		data.emplace_back(point, value);
+		data.emplace_back(point * 1000, value);
 	}
 
 	std::cout << "Dataset size is " << data.size() << '\n';
@@ -71,7 +71,7 @@ int main(int argc, char* argv[])
 	std::cout << std::fixed << std::setprecision(6);
 	
 	using namespace numer::laplace;
-	auto [result] = pl::solveBatched<transformType::Trapezia>(data, 64);
+	auto [result] = pl::solveBatched<transformType::Trapezia>(data, 16);
 
 	std::system("pause");
 }
