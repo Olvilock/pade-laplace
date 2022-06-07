@@ -12,7 +12,7 @@ import <plFormat.h>;
 
 #endif
 
-namespace lpl
+namespace pl
 {
-	it::Spline::storage_type getSpline(const pl::dataset_type&);
+	numer::Spline::storage_type getSpline(const dataset_type&);
 }

@@ -10,9 +10,9 @@ export import <Spline.h>;
 import :ThomasMethod;
 import <algorithm>;
 
-export namespace it
+export namespace numer
 {
-	Spline::Spline(const std::vector<Point>& data) :
+	Spline::Spline(const dataset_type& data) :
 		m_vertices(data.size() - 1), m_spline(data.size() - 1)
 	{
 		std::vector<std::array<std::complex<double>, 4> > forThomas(data.size());

@@ -2,7 +2,7 @@
 
 #include <complex>
 
-namespace it
+namespace numer
 {
 	struct Point
 	{

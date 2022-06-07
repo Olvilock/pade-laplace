@@ -11,14 +11,24 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headers\solveAberth.cuh" />
+    <ClInclude Include="headers\pl_slae.cuh" />
+    <ClInclude Include="headers\residue.cuh" />
+    <ClInclude Include="headers\laplace\format.h" />
+    <ClInclude Include="headers\Point.h" />
+    <ClInclude Include="headers\polyroot.cuh" />
+    <ClInclude Include="headers\Spline.h" />
+    <ClInclude Include="headers\laplace\transform.cuh" />
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="src\solveAberth.cu" />
-    <CudaCompile Include="src\testAberth.cu">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </CudaCompile>
+    <ClCompile Include="modules\Spline.ixx" />
+    <ClCompile Include="modules\ThomasMethod.ixx" />
+  </ItemGroup>
+  <ItemGroup>
+    <CudaCompile Include="src\laplace\transformTrapezia.cu" />
+    <CudaCompile Include="src\pl_slae.cu" />
+    <CudaCompile Include="src\polyroot.cu" />
+    <CudaCompile Include="src\residue.cu" />
+    <CudaCompile Include="src\laplace\transformSplines.cu" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2E6E8726-98E7-41C5-8766-920834461E25}</ProjectGuid>
@@ -53,7 +63,7 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)headers;$(SolutionDir)Interpolation\headers</IncludePath>
+    <IncludePath>$(ProjectDir)headers</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(ProjectDir)headers;$(SolutionDir)Interpolation\headers</IncludePath>
@@ -79,6 +89,7 @@
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <CodeGeneration>compute_61,sm_61</CodeGeneration>
+      <AdditionalOptions>--expt-relaxed-constexpr %(AdditionalOptions)</AdditionalOptions>
     </CudaCompile>
     <Lib />
   </ItemDefinitionGroup>
@@ -103,7 +114,7 @@
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
-      <AdditionalOptions>-dc %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-dc --expt-relaxed-constexpr %(AdditionalOptions)</AdditionalOptions>
       <CodeGeneration>compute_61,lto_61</CodeGeneration>
     </CudaCompile>
     <Lib />
