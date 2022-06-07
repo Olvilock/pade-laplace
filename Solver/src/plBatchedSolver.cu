@@ -1,8 +1,9 @@
-#include <plFormat.h>
-#include <plBatchedSolver.h>
-#include <kernel_plBatchedSolver.cuh>
+#include <plSolver.h>
+#include <kernel/plBatchedSolver.cuh>
 
-#include <getSpline.h>
+#include <device/transform.cuh>
+#include <transformTypes.cuh>
+#include <spline.h>
 
 #include <thrust/host_vector.h>
 #include <thrust/device_vector.h>
@@ -23,6 +24,9 @@
 
 namespace pl
 {
+	DeviceNode::DeviceNode(const Node& node) :
+		point{ node.point }, value{ node.value } {}
+
 	using complex = thrust::complex<double>;
 
 	int operator & (batchedStatus a, batchedStatus b)
@@ -35,10 +39,9 @@ namespace pl
 	Approximation solveBatched<transformType::Trapezia> (
 		const dataset_type& h_data, unsigned depth)
 	{
-		using numer::laplace::Point;
-		thrust::device_vector<Point> d_data = h_data;
+		thrust::device_vector<DeviceNode> d_data = h_data;
 		auto less_point =
-			[] __device__ (const Point& a, const Point& b)
+			[] __device__ (const DeviceNode & a, const DeviceNode & b)
 			{ return a.point < b.point; };
 		thrust::sort(thrust::device, d_data.begin(), d_data.end(), less_point);
 		
@@ -53,29 +56,21 @@ namespace pl
 		thrust::device_vector<batchedResult> d_result(
 			d_grid.size() * depth * (depth + 1) / 2,
 			{ {}, batchedStatus::untouched });
-
-		complex* buffer;
-		cudaMalloc(&buffer,
-			d_grid.size() * depth * (depth + 1) * sizeof(complex));
-		cudaCheckErrors("Malloc failed\n");
 		
 		cudaSetDeviceFlags(cudaDeviceScheduleBlockingSync);
 		cudaCheckErrors("Device error\n");
 		std::cout << "Kernel launch...\n";
 		
-		kernelBatchedVecSolver<transformType::Trapezia, const Point*, unsigned>
-		<<< d_grid.size(), depth, 2 * depth * sizeof(complex) >>>
-			(d_grid.data().get(), buffer, d_result.data().get(),
-				d_data.data().get(), d_data.size());
+		kernelBatchedVecSolver
+		<<< d_grid.size(), depth, 4 * depth * sizeof(complex) >>>
+			(d_grid.data().get(), d_result.data().get(),
+				TrapeziaData{ d_data.data().get(), (unsigned)d_data.size() });
 		
 		cudaCheckErrors("Kernel launch failed\n");
 		
 		cudaDeviceSynchronize();
 		cudaCheckErrors("Could not synchronize\n");
 		std::cout << "Kernel finished\n";
-		
-		cudaFree(buffer);
-		cudaCheckErrors("Could not free buffer\n");
 		
 		thrust::host_vector<batchedResult> h_result = d_result;
 		auto res_it = h_result.begin();

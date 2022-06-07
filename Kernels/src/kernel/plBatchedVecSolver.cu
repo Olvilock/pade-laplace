@@ -1,14 +1,15 @@
-#include <kernel_plBatchedSolver.cuh>
+#include <kernel/plBatchedSolver.cuh>
 
-#include <polyroot.cuh>
-#include <pl_slae.cuh>
-#include <residue.cuh>
+#include <device/polyroot.cuh>
+#include <device/pl_slae.cuh>
+#include <device/residue.cuh>
+
+#include <device/transform.cuh>
+#include <transformTypes.cuh>
 
 namespace pl
 {
 	using complex = thrust::complex<double>;
-	using numer::laplace::transformType;
-	using numer::laplace::Point;
 	
 	__device__
 		const batchedStatus& operator |= (
@@ -18,29 +19,24 @@ namespace pl
 			static_cast<int>(me) | static_cast<int>(other));
 		return me;
 	}
-
-	template
-	__global__ void kernelBatchedVecSolver<transformType::Trapezia>(
-		const complex*, complex*, batchedResult*,
-		const Point*, unsigned);
-	template
-	__global__ void kernelBatchedVecSolver<transformType::Spline>(
-		const complex*, complex*, batchedResult*,
-		const numer::laplace::SplineSegment*, unsigned,
-		const numer::laplace::SplineEndpoint,
-		const numer::laplace::SplineEndpoint);
 	
-	template <transformType type, typename ... Args>
+	template __global__ void kernelBatchedVecSolver(
+		const complex* grid,
+		batchedResult* result_grid,
+		TrapeziaData);
+	template __global__ void kernelBatchedVecSolver(
+		const complex* grid,
+		batchedResult* result_grid,
+		SplineData);
+
+	template <typename Arg>
 	__global__ void kernelBatchedVecSolver(
 		const complex* grid,
-		complex* glb_buf,
 		batchedResult* result_grid,
-		Args ... args)
+		Arg arg)
 	{
 		auto s = grid[blockIdx.x];
-		auto taylor = numer::laplace::transform<type>(s, args...);
-
-		glb_buf += blockIdx.x * blockDim.x * (blockDim.x + 1);
+		auto taylor = transform(s, arg);
 
 		batchedResult* out_ptr = result_grid +
 			blockIdx.x * blockDim.x * (blockDim.x + 1) / 2;
@@ -53,7 +49,7 @@ namespace pl
 			__syncthreads();
 
 			batchedStatus status = batchedStatus::ok;
-			if (!(slae_LU(lc_dim, glb_buf) < 1e-6))
+			if (!(slae_LU(lc_dim) < 1e-6))
 				status |= batchedStatus::degenerate_system;
 //			if (threadIdx.x < lc_dim)
 //				printf("dim = %i, id = %i, diff = %lf\n",

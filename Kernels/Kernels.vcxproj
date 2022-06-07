@@ -11,30 +11,25 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headers\pl_slae.cuh" />
-    <ClInclude Include="headers\residue.cuh" />
-    <ClInclude Include="headers\laplace\format.h" />
-    <ClInclude Include="headers\Point.h" />
-    <ClInclude Include="headers\polyroot.cuh" />
-    <ClInclude Include="headers\Spline.h" />
-    <ClInclude Include="headers\laplace\transform.cuh" />
+    <ClInclude Include="headers\kernel\plBatchedSolver.cuh" />
+    <ClInclude Include="headers\device\pl_slae.cuh" />
+    <ClInclude Include="headers\device\residue.cuh" />
+    <ClInclude Include="headers\device\polyroot.cuh" />
+    <ClInclude Include="headers\device\transform.cuh" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="modules\Spline.ixx" />
-    <ClCompile Include="modules\ThomasMethod.ixx" />
-  </ItemGroup>
-  <ItemGroup>
-    <CudaCompile Include="src\laplace\transformTrapezia.cu" />
-    <CudaCompile Include="src\pl_slae.cu" />
-    <CudaCompile Include="src\polyroot.cu" />
-    <CudaCompile Include="src\residue.cu" />
-    <CudaCompile Include="src\laplace\transformSplines.cu" />
+    <CudaCompile Include="src\device\transformTrapezia.cu" />
+    <CudaCompile Include="src\device\pl_slae.cu" />
+    <CudaCompile Include="src\device\polyroot.cu" />
+    <CudaCompile Include="src\device\residue.cu" />
+    <CudaCompile Include="src\device\transformSplines.cu" />
+    <CudaCompile Include="src\kernel\plBatchedVecSolver.cu" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2E6E8726-98E7-41C5-8766-920834461E25}</ProjectGuid>
     <RootNamespace>LaplaceTransform</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Numerics</ProjectName>
+    <ProjectName>Kernels</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -52,7 +47,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.6.props" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.7.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -63,10 +58,10 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)headers</IncludePath>
+    <IncludePath>$(ProjectDir)headers;$(SolutionDir)Solver\headers</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)headers;$(SolutionDir)Interpolation\headers</IncludePath>
+    <IncludePath>$(ProjectDir)headers;$(SolutionDir)Solver\headers</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -92,6 +87,7 @@
       <AdditionalOptions>--expt-relaxed-constexpr %(AdditionalOptions)</AdditionalOptions>
     </CudaCompile>
     <Lib />
+    <ProjectReference />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -121,9 +117,10 @@
     <CudaLink>
       <AdditionalOptions>-gencode=arch=compute_61,code=sm_61 -dlto %(AdditionalOptions)</AdditionalOptions>
     </CudaLink>
+    <ProjectReference />
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.6.targets" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.7.targets" />
   </ImportGroup>
 </Project>

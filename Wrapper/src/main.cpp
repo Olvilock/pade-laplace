@@ -1,11 +1,10 @@
-import <iostream>;
-import <fstream>;
-import <filesystem>;
-import <string>;
+#include <iostream>
+#include <fstream>
+#include <filesystem>
+#include <string>
 
-import Spline;
-import <plFormat.h>;
-import <plBatchedSolver.h>;
+#include <plSolver.h>
+#include <spline.h>
 
 int main(int argc, char* argv[])
 {
@@ -14,22 +13,9 @@ int main(int argc, char* argv[])
 
 	constexpr const char* extension = ".padelpltxt";
 	
-	pl::dataset_type data;
 	if (argc != 2)
 	{
 		std::cout << "Usage: " << argv[0] << " {infile}\n";
-		
-		constexpr double step = 0.01;
-		std::ofstream fout("data/e-1_1000"s + extension);
-		fout << std::fixed << std::setprecision(10);
-
-		// data.reserve(101);
-		for (int i = 0; i != 1001; ++i)
-		{
-			fout << i * step << ' ' << std::exp(-i * step) << '\n';
-			// data.emplace_back(i * step, std::exp(-i * step));
-		}
-		
 		return EXIT_FAILURE;
 	}
 
@@ -46,21 +32,22 @@ int main(int argc, char* argv[])
 		return EXIT_FAILURE;
 	}
 
+	pl::dataset_type data;
 	for (std::fstream fin(path);;)
 	{
-		double point, value;
-		fin >> point >> value;
+		double Node, value;
+		fin >> Node >> value;
 		if (!fin.good())
 			break;
-		data.emplace_back(point * 1000, value);
+		data.emplace_back(Node * 1000, value);
 	}
 
 	std::cout << "Dataset size is " << data.size() << '\n';
 	/*
-	auto spline = numer::Spline(data).get_spline();
+	auto spline = pl::getSpline(data);
 	for (std::size_t id = 1; id != data.size(); ++id)
 	{
-		auto x = data[id - 1].point - data[id].point;
+		auto x = data[id - 1].Node - data[id].Node;
 		auto& [a, b, c, d] = spline[id - 1];
 		std::cout << a + x * (b + x * (c + x * d)) << ' ';
 		std::cout << b + x * (2.0 * c + x * 3.0 * d) << ' ';
@@ -69,9 +56,7 @@ int main(int argc, char* argv[])
 	}
 	*/
 	std::cout << std::fixed << std::setprecision(6);
-	
-	using namespace numer::laplace;
-	auto [result] = pl::solveBatched<transformType::Trapezia>(data, 16);
+	auto [result] = pl::solveBatched<pl::transformType::Trapezia>(data, 16);
 
 	std::system("pause");
 }

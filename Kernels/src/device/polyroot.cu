@@ -1,4 +1,4 @@
-#include <polyroot.cuh>
+#include <device/polyroot.cuh>
 
 #include <thrust/complex.h>
 

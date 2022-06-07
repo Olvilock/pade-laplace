@@ -1,4 +1,4 @@
-#include <pl_slae.cuh>
+#include <device/pl_slae.cuh>
 
 #include <thrust/complex.h>
 
@@ -6,8 +6,9 @@ namespace pl
 {
 	using complex = thrust::complex<double>;
 	
-	__device__ double slae_LU(const int dim, complex* glb_buf)
+	__device__ double slae_LU(const int dim)
 	{
+		/*
 		extern __shared__ complex buffer[];
 		if (threadIdx.x < dim)
 			for (int col = 0; col <= dim; ++col)
@@ -54,6 +55,8 @@ namespace pl
 				glb_buf[dim * dim + threadIdx.x];
 		__syncthreads();
 		
-		return error;
+		return error;*/
+		
+		return {};
 	}
 }

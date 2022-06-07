@@ -1,4 +1,4 @@
-#include <residue.cuh>
+#include <device/residue.cuh>
 
 namespace numer
 {
