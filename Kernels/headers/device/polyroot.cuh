@@ -2,10 +2,9 @@
 
 #include <thrust/complex.h>
 
-namespace numer
+namespace pl
 {
-	__device__ thrust::complex<double> solveAberth(
+	__device__ double solveAberth(
 		const int dim,
-		thrust::complex<double> highest_coeff,
 		const int iter_count = 100);
 }

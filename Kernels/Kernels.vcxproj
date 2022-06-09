@@ -11,7 +11,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headers\kernel\plBatchedSolver.cuh" />
+    <ClInclude Include="headers\kernel\batchedSolver.cuh" />
     <ClInclude Include="headers\device\pl_slae.cuh" />
     <ClInclude Include="headers\device\residue.cuh" />
     <ClInclude Include="headers\device\polyroot.cuh" />
@@ -23,7 +23,7 @@
     <CudaCompile Include="src\device\polyroot.cu" />
     <CudaCompile Include="src\device\residue.cu" />
     <CudaCompile Include="src\device\transformSplines.cu" />
-    <CudaCompile Include="src\kernel\plBatchedVecSolver.cu" />
+    <CudaCompile Include="src\kernel\batchedSolver.cu" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{2E6E8726-98E7-41C5-8766-920834461E25}</ProjectGuid>

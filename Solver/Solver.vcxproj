@@ -19,7 +19,7 @@
     <ClCompile Include="src\spline.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="src\plBatchedSolver.cu" />
+    <CudaCompile Include="src\batchedSolver.cu" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kernels\Kernels.vcxproj">

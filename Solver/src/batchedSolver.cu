@@ -1,5 +1,5 @@
 #include <plSolver.h>
-#include <kernel/plBatchedSolver.cuh>
+#include <kernel/batchedSolver.cuh>
 
 #include <device/transform.cuh>
 #include <transformTypes.cuh>
@@ -48,8 +48,8 @@ namespace pl
 		std::vector<thrust::complex<double> > h_grid
 		{
 			{ 5.0, 0.0 },
-			{ 3.0, 0.0 },
-			{ 3.0, 10.0 }
+			//{ 3.0, 0.0 },
+			//{ 3.0, 10.0 }
 		};
 		thrust::device_vector<thrust::complex<double> > d_grid = h_grid;
 		
@@ -84,11 +84,11 @@ namespace pl
 				for (int id = 0; id < count; id++, cur_it++)
 				{
 					if ((*cur_it).status & batchedStatus::degenerate_system)
-						std::cout << "(degenerate)\n";
+						std::cout << "(degenerate)";
 					if ((*cur_it).status & batchedStatus::Aberth_divergence)
-						std::cout << "(divergence)\n";
+						std::cout << "(divergence)";
 					if ((*cur_it).status & batchedStatus::untouched)
-						std::cout << "(untouched)\n";
+						std::cout << "(untouched)";
 					if ((*cur_it).status == batchedStatus::ok)
 						std::cout << "(ok)";
 					
