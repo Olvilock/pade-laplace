@@ -73,6 +73,9 @@ namespace pl
 		
 		while (iter_count--)
 		{
+			if (err_norm < 1e-32)
+				break;
+
 			apply(dim, basis);
 			
 			if (threadIdx.x < dim)
@@ -89,10 +92,7 @@ namespace pl
 			if (threadIdx.x < dim)
 				norm[threadIdx.x] = thrust::norm(error);
 			reduce(dim);
-			/*
-			if (norm[threadIdx.x] < 1e-16)
-				break;
-*/
+
 			auto beta = norm[threadIdx.x] / err_norm;
 			basis = error + beta * basis;
 			

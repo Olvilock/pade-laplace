@@ -51,7 +51,7 @@ namespace pl
 			batchedStatus status = batchedStatus::ok;
 			__syncthreads();
 
-			if (!(pl_slae_cg(lc_dim) < 1e-6))
+			if (!(pl_slae_cg(lc_dim, 1000) < 1e-6))
 				status |= batchedStatus::degenerate_system;
 
 			auto this_coeff = taylor[threadIdx.x];
@@ -72,7 +72,7 @@ namespace pl
 						taylor[id_sum - id] * coeff[id];
 			}
 
-			if (!(solveAberth(lc_dim) < 1e-6))
+			if (!(solveAberth(lc_dim, 100) < 1e-6))
 				status |= batchedStatus::Aberth_divergence;
 
 			coeff[threadIdx.x] = this_coeff;

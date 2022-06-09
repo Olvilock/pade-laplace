@@ -6,5 +6,5 @@ namespace pl
 {
 	__device__ double solveAberth(
 		const int dim,
-		const int iter_count = 100);
+		const int iter_count);
 }

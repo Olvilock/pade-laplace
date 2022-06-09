@@ -4,5 +4,5 @@
 
 namespace pl
 {
-	__device__ double pl_slae_cg(const int dim, int iter_count = 100);
+	__device__ double pl_slae_cg(const int dim, int iter_count);
 }
