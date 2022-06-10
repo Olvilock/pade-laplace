@@ -30,7 +30,7 @@
     <ProjectGuid>{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}</ProjectGuid>
     <RootNamespace>LaplaceTransform</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Pade-Laplace Solver</ProjectName>
+    <ProjectName>Solver</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">

@@ -18,7 +18,7 @@ namespace pl
     struct TrapeziaData
     {
         const DeviceNode* nodes;
-        unsigned count;
+        int count;
     };
 
     struct SplineData
@@ -34,7 +34,7 @@ namespace pl
         };
 
         const SplineSegment* segments;
-        unsigned segments_count;
+        int segments_count;
 
         const SplineEndpoint left;
         const SplineEndpoint right;

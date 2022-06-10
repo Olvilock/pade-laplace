@@ -73,7 +73,7 @@ namespace pl
 		
 		while (iter_count--)
 		{
-			if (err_norm < 1e-32)
+			if (err_norm < 1e-64)
 				break;
 
 			apply(dim, basis);
@@ -98,7 +98,7 @@ namespace pl
 			
 			err_norm = norm[threadIdx.x];
 		}
-		
+		/*
 		apply(dim, root);
 
 		if (threadIdx.x < dim)
@@ -108,7 +108,7 @@ namespace pl
 		
 		if (!threadIdx.x)
 			printf("Error norm^2 is %le, "
-				   "computed error norm^2 %le\n", norm[threadIdx.x], err_norm);
+				   "computed error norm^2 %le\n", norm[threadIdx.x], err_norm);*/
 
 		if (threadIdx.x < dim)
 			result[dim - threadIdx.x - 1] = root;

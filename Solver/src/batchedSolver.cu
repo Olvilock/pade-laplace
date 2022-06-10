@@ -64,7 +64,7 @@ namespace pl
 		kernelBatchedVecSolver
 		<<< d_grid.size(), depth, 4 * depth * sizeof(complex) >>>
 			(d_grid.data().get(), d_result.data().get(),
-				TrapeziaData{ d_data.data().get(), (unsigned)d_data.size() });
+				TrapeziaData{ d_data.data().get(), (int)d_data.size() });
 		
 		cudaCheckErrors("Kernel launch failed\n");
 		

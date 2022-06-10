@@ -40,9 +40,12 @@ namespace pl
 		auto taylor = coeff + blockDim.x;
 		
 		auto point = grid[blockIdx.x];
-		thrust::tie(
-			taylor[threadIdx.x],
-			taylor[threadIdx.x + blockDim.x]) = transform(point, arg);
+		auto transform_pair = transform(point, arg);
+		taylor[threadIdx.x] = transform_pair.first;
+		taylor[threadIdx.x + blockDim.x] = transform_pair.second;
+
+		//printf("%i: %le %le\n", threadIdx.x,
+		//	taylor[threadIdx.x].real(), taylor[threadIdx.x].imag());
 
 		batchedResult* out_ptr = result_grid +
 			blockIdx.x * blockDim.x * (blockDim.x + 1) / 2;
@@ -71,15 +74,30 @@ namespace pl
 						taylor[id] * coeff[id_sum - id] +
 						taylor[id_sum - id] * coeff[id];
 			}
-
+			
+			auto highest_coeff = coeff[threadIdx.x];
+			
 			if (!(solveAberth(lc_dim, 100) < 1e-6))
 				status |= batchedStatus::Aberth_divergence;
 
+			if (threadIdx.x == lc_dim - 1)
+				coeff[0] = highest_coeff;
+			__syncthreads();
+			for (int id = 1; id < lc_dim; id <<= 1)
+			{
+				if (threadIdx.x < id && threadIdx.x + id < lc_dim)
+					coeff[threadIdx.x + id] = coeff[threadIdx.x];
+				__syncthreads();
+			}
+			highest_coeff = coeff[threadIdx.x];
+
 			coeff[threadIdx.x] = this_coeff;
+			__syncthreads();
+			
 			if (threadIdx.x < lc_dim)
 				out_ptr[threadIdx.x] = {
 				{
-					numer::residue(lc_dim) / coeff[lc_dim - 1],
+					numer::residue(lc_dim) / highest_coeff,
 					roots[threadIdx.x] + point
 				}, status };
 		}

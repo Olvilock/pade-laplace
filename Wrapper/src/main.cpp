@@ -35,11 +35,11 @@ int main(int argc, char* argv[])
 	pl::dataset_type data;
 	for (std::fstream fin(path);;)
 	{
-		double Node, value;
-		fin >> Node >> value;
+		double point, value;
+		fin >> point >> value;
 		if (!fin.good())
 			break;
-		data.emplace_back(Node * 1000, value);
+		data.emplace_back(point * 1000, value);
 	}
 
 	std::cout << "Dataset size is " << data.size() << '\n';
@@ -56,7 +56,7 @@ int main(int argc, char* argv[])
 	}
 	*/
 	std::cout << std::fixed << std::setprecision(6);
-	auto [result] = pl::solveBatched<pl::transformType::Trapezia>(data, 16);
+	auto [result] = pl::solveBatched<pl::transformType::Trapezia>(data, 64);
 
 	std::system("pause");
 }
