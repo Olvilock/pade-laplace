@@ -11,38 +11,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="headers\kernel_plBatchedSolver.cuh" />
-    <ClInclude Include="headers\plBatchedSolver.h" />
-    <ClInclude Include="headers\getSpline.h" />
-    <ClInclude Include="headers\plFormat.h" />
+    <ClInclude Include="headers\plSolver.h" />
+    <ClInclude Include="headers\spline.h" />
+    <ClInclude Include="headers\transformTypes.cuh" />
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="src\kernel_plBatchedSolver.cu" />
-    <CudaCompile Include="src\plApprox.cu">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </CudaCompile>
-    <CudaCompile Include="src\plBatchedSolver.cu" />
+    <ClCompile Include="src\spline.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Auxiliary Math\Auxiliary Math.vcxproj">
-      <Project>{cbd0e755-f60e-4b0d-a33f-009b9f55e728}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Interpolation\Interpolation.vcxproj">
-      <Project>{cbd0e755-f60e-4b0d-a33f-009b9f55e728}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\Numerics\Numerics.vcxproj">
+    <CudaCompile Include="src\batchedSolver.cu" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Kernels\Kernels.vcxproj">
       <Project>{2e6e8726-98e7-41c5-8766-920834461e25}</Project>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="src\getSpline.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}</ProjectGuid>
     <RootNamespace>LaplaceTransform</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
-    <ProjectName>Pade-Laplace Solver</ProjectName>
+    <ProjectName>Solver</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
@@ -60,7 +48,7 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.6.props" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.7.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
@@ -71,12 +59,12 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)headers;$(SolutionDir)Numerics\headers</IncludePath>
-    <TargetName>padeLaplaceSolver</TargetName>
+    <IncludePath>$(ProjectDir)headers;$(SolutionDir)Kernels\headers</IncludePath>
+    <TargetName>plSolver</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)headers;$(SolutionDir)Numerics\headers</IncludePath>
-    <TargetName>padeLaplaceSolver</TargetName>
+    <IncludePath>$(ProjectDir)headers;$(SolutionDir)Kernels\headers</IncludePath>
+    <TargetName>plSolver</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -85,6 +73,8 @@
       <PreprocessorDefinitions>WIN32;WIN64;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -97,12 +87,13 @@
       <AdditionalOptions>--extended-lambda %(AdditionalOptions)</AdditionalOptions>
     </CudaCompile>
     <Lib />
-    <ProjectReference>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-    </ProjectReference>
-    <CudaLink>
-      <AdditionalDependencies>$(SolutionDir)$(IntDir)Numerics.lib</AdditionalDependencies>
-    </CudaLink>
+    <ProjectReference />
+    <CudaLink />
+    <ProjectReference />
+    <ProjectReference />
+    <Lib />
+    <CudaLink />
+    <ProjectReference />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -114,8 +105,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <LanguageStandard_C>stdc17</LanguageStandard_C>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
-      <EnableModules>true</EnableModules>
-      <ScanSourceForModuleDependencies>true</ScanSourceForModuleDependencies>
+      <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -133,14 +123,15 @@
     <Lib />
     <CudaLink>
       <AdditionalOptions>-gencode=arch=compute_61,code=sm_61 -dlto %(AdditionalOptions)</AdditionalOptions>
-      <AdditionalDependencies>$(SolutionDir)$(IntDir)Numerics.lib</AdditionalDependencies>
     </CudaLink>
-    <ProjectReference>
-      <LinkLibraryDependencies>true</LinkLibraryDependencies>
-    </ProjectReference>
+    <ProjectReference />
+    <ProjectReference />
+    <ProjectReference />
+    <Lib />
+    <ProjectReference />
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.6.targets" />
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\CUDA 11.7.targets" />
   </ImportGroup>
 </Project>

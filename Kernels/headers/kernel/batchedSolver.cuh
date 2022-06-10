@@ -2,9 +2,6 @@
 
 #include <thrust/complex.h>
 
-#include <laplace/format.h>
-#include <laplace/transform.cuh>
-
 namespace pl
 {
 	struct batchedTerm
@@ -25,10 +22,9 @@ namespace pl
 		batchedStatus status;
 	};
 
-	template <numer::laplace::transformType type, typename ... Args>
+	template <typename Arg>
 	__global__ void kernelBatchedVecSolver(
 		const thrust::complex<double>* grid,
-		thrust::complex<double>* glb_buf,
 		batchedResult* result_grid,
-		Args ... args);
+		Arg arg);
 }

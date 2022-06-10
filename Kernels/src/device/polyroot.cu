@@ -1,8 +1,8 @@
-#include <polyroot.cuh>
+#include <device/polyroot.cuh>
 
 #include <thrust/complex.h>
 
-namespace numer
+namespace pl
 {
 	using complex = thrust::complex<double>;
 	
@@ -42,9 +42,8 @@ namespace numer
 		}
 	}
 	
-	__device__ complex solveAberth(
+	__device__ double solveAberth(
 		const int dim,
-		thrust::complex<double> highest_coeff,
 		const int iter_count )
 	{
 		extern __shared__ complex roots[];
@@ -76,6 +75,6 @@ namespace numer
 			}
 			__syncthreads();
 		}
-		return delta;
+		return thrust::abs(delta);
 	}
 }
