@@ -43,18 +43,6 @@ int main(int argc, char* argv[])
 	}
 
 	std::cout << "Dataset size is " << data.size() << '\n';
-	/*
-	auto spline = pl::getSpline(data);
-	for (std::size_t id = 1; id != data.size(); ++id)
-	{
-		auto x = data[id - 1].Node - data[id].Node;
-		auto& [a, b, c, d] = spline[id - 1];
-		std::cout << a + x * (b + x * (c + x * d)) << ' ';
-		std::cout << b + x * (2.0 * c + x * 3.0 * d) << ' ';
-		std::cout << 2.0 * c + 6.0 * x * d << ' ' << 6.0 * d << '\n';
-		std::cout << a << ' ' << b << ' ' << 2.0 * c << ' ' << 6.0 * d << '\n';
-	}
-	*/
 	std::cout << std::fixed << std::setprecision(6);
 	auto [result] = pl::solveBatched<pl::transformType::Trapezia>(data, 64);
 
