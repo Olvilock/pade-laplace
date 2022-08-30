@@ -23,11 +23,19 @@
     <None Include="data\N1D1i2T2ms.padelpltxt">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="data\e-1_1000.padelpltxt" />
-    <None Include="data\e-1_100.padelpltxt" />
-    <None Include="data\e-1_10.padelpltxt" />
+    <None Include="data\e-1_10.padelpltxt">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\e-1_100.padelpltxt">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="data\e-1_1000.padelpltxt">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="data\RC-CR.padelpltxt" />
+    <Text Include="data\RC-CR.padelpltxt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
