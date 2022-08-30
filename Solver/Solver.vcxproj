@@ -60,11 +60,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir)headers;$(SolutionDir)Kernels\headers</IncludePath>
-    <TargetName>plSolver</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(ProjectDir)headers;$(SolutionDir)Kernels\headers</IncludePath>
-    <TargetName>plSolver</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -84,7 +82,8 @@
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <CodeGeneration>compute_61,sm_61</CodeGeneration>
-      <AdditionalOptions>--extended-lambda %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-dc --extended-lambda %(AdditionalOptions)</AdditionalOptions>
+      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
     </CudaCompile>
     <Lib />
     <ProjectReference />
@@ -93,6 +92,7 @@
     <ProjectReference />
     <Lib />
     <CudaLink />
+    <ProjectReference />
     <ProjectReference />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -128,6 +128,7 @@
     <ProjectReference />
     <ProjectReference />
     <Lib />
+    <ProjectReference />
     <ProjectReference />
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
