@@ -118,11 +118,11 @@
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
       <AdditionalOptions>-dc --extended-lambda %(AdditionalOptions)</AdditionalOptions>
-      <CodeGeneration>compute_61,lto_61</CodeGeneration>
+      <CodeGeneration>compute_50,lto_50</CodeGeneration>
     </CudaCompile>
     <Lib />
     <CudaLink>
-      <AdditionalOptions>-gencode=arch=compute_61,code=sm_61 -dlto %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-gencode=arch=compute_50,code=sm_50 -dlto %(AdditionalOptions)</AdditionalOptions>
     </CudaLink>
     <ProjectReference />
     <ProjectReference />
