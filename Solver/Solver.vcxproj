@@ -59,11 +59,9 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(ProjectDir)headers;$(SolutionDir)Kernels\headers</IncludePath>
-    <TargetName>plSolver</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(ProjectDir)headers;$(SolutionDir)Kernels\headers</IncludePath>
-    <TargetName>plSolver</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -83,7 +81,8 @@
     <CudaCompile>
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <CodeGeneration>compute_61,sm_61</CodeGeneration>
-      <AdditionalOptions>--extended-lambda %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-dc --extended-lambda %(AdditionalOptions)</AdditionalOptions>
+      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
     </CudaCompile>
     <Lib />
     <ProjectReference />
@@ -92,6 +91,7 @@
     <ProjectReference />
     <Lib />
     <CudaLink />
+    <ProjectReference />
     <ProjectReference />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -117,16 +117,17 @@
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
       <AdditionalOptions>-dc --extended-lambda %(AdditionalOptions)</AdditionalOptions>
-      <CodeGeneration>compute_61,lto_61</CodeGeneration>
+      <CodeGeneration>compute_50,lto_50</CodeGeneration>
     </CudaCompile>
     <Lib />
     <CudaLink>
-      <AdditionalOptions>-gencode=arch=compute_61,code=sm_61 -dlto %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-gencode=arch=compute_50,code=sm_50 -dlto %(AdditionalOptions)</AdditionalOptions>
     </CudaLink>
     <ProjectReference />
     <ProjectReference />
     <ProjectReference />
     <Lib />
+    <ProjectReference />
     <ProjectReference />
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
