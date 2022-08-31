@@ -61,8 +61,8 @@ namespace pl
 			(get_sum<0>(s, threadIdx.x) * data.left.a +
 				get_sum<1>(s, threadIdx.x) * data.left.b),
 			res2 = coeff *
-			(get_sum<1>(s, threadIdx.x + blockDim.x) * data.left.a +
-				get_sum<2>(s, threadIdx.x + blockDim.x) * data.left.b);
+			(get_sum<0>(s, threadIdx.x + blockDim.x) * data.left.a +
+				get_sum<1>(s, threadIdx.x + blockDim.x) * data.left.b);
 
 		while (--data.segments_count)
 		{
@@ -82,6 +82,10 @@ namespace pl
 			(get_sum<0>(s, threadIdx.x) * data.right.a +
 				get_sum<1>(s, threadIdx.x) * data.right.b +
 				get_sum<3>(s, threadIdx.x) * segment.d);
+		res2 -= coeff *
+			(get_sum<0>(s, threadIdx.x + blockDim.x) * data.right.a +
+				get_sum<1>(s, threadIdx.x + blockDim.x) * data.right.b +
+				get_sum<3>(s, threadIdx.x + blockDim.x) * segment.d);
 
 		return { res1, res2 };
 	}
