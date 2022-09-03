@@ -168,24 +168,21 @@
     </CudaLink>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="data\e-1_10.padelpltxt" />
-    <None Include="data\e-1_100.padelpltxt" />
-    <None Include="data\e-1_1000.padelpltxt" />
-    <None Include="data\N1D1i2T2ms.padelpltxt" />
+    <None Include="data\e-1_10.txt" />
+    <None Include="data\e-1_100.txt" />
+    <None Include="data\e-1_1000.txt" />
+    <None Include="data\N1D1i2T2ms.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Kernels\Kernels.vcxproj">
-      <Project>{2e6e8726-98e7-41c5-8766-920834461e25}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Solver\Solver.vcxproj">
       <Project>{1be38a13-3d45-42f4-b5ae-4beafd787d6f}</Project>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="data\RC-CR.padelpltxt" />
+    <Text Include="data\RC-CR.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -13,7 +13,7 @@ namespace pl
 	
 	using dataset_type = std::vector<Node>;
 
-	struct Approximation
+	struct Multiexp
 	{
 		struct Term
 		{
@@ -29,5 +29,5 @@ namespace pl
 	};
 
 	template <transformType>
-	Approximation solveBatched(const dataset_type& data, unsigned depth);
+	Multiexp solveBatched(const dataset_type& data, unsigned depth);
 }

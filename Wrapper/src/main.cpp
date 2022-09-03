@@ -11,7 +11,7 @@ int main(int argc, char* argv[])
 	using namespace std::string_literals;
 	namespace fs = std::filesystem;
 
-	constexpr const char* extension = ".padelpltxt";
+	constexpr const char* extension = ".txt";
 	
 	if (argc != 2)
 	{
@@ -44,7 +44,7 @@ int main(int argc, char* argv[])
 
 	std::cout << "Dataset size is " << data.size() << '\n';
 	std::cout << std::fixed << std::setprecision(6);
-	auto [result] = pl::solveBatched<pl::transformType::Trapezia>(data, 64);
+	pl::solveBatched<pl::transformType::Trapezia>(data, 64);
 
 	std::system("pause");
 }

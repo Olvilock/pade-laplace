@@ -11,19 +11,26 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="headers\device\pl_slae.cuh" />
+    <ClInclude Include="headers\device\polyroot.cuh" />
+    <ClInclude Include="headers\device\residue.cuh" />
+    <ClInclude Include="headers\device\transform.cuh" />
+    <ClInclude Include="headers\kernel\batchedSolver.cuh" />
     <ClInclude Include="headers\plSolver.h" />
     <ClInclude Include="headers\spline.h" />
+    <ClInclude Include="headers\transformTypes.cuh" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\spline.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="src\batchedSolver.cu" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Kernels\Kernels.vcxproj">
-      <Project>{2e6e8726-98e7-41c5-8766-920834461e25}</Project>
-    </ProjectReference>
+    <CudaCompile Include="src\solver.cu" />
+    <CudaCompile Include="src\device\pl_slae.cu" />
+    <CudaCompile Include="src\device\polyroot.cu" />
+    <CudaCompile Include="src\device\residue.cu" />
+    <CudaCompile Include="src\device\transformSplines.cu" />
+    <CudaCompile Include="src\device\transformTrapezia.cu" />
+    <CudaCompile Include="src\kernel\batchedSolver.cu" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}</ProjectGuid>
@@ -58,12 +65,10 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)headers;$(SolutionDir)Kernels\headers</IncludePath>
-    <TargetName>plSolver</TargetName>
+    <IncludePath>$(ProjectDir)headers</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)headers;$(SolutionDir)Kernels\headers</IncludePath>
-    <TargetName>plSolver</TargetName>
+    <IncludePath>$(ProjectDir)headers</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -84,6 +89,7 @@
       <TargetMachinePlatform>64</TargetMachinePlatform>
       <CodeGeneration>compute_61,sm_61</CodeGeneration>
       <AdditionalOptions>--extended-lambda %(AdditionalOptions)</AdditionalOptions>
+      <GenerateRelocatableDeviceCode>true</GenerateRelocatableDeviceCode>
     </CudaCompile>
     <Lib />
     <ProjectReference />
@@ -91,6 +97,8 @@
     <ProjectReference />
     <ProjectReference />
     <Lib />
+    <CudaLink />
+    <ProjectReference />
     <CudaLink />
     <ProjectReference />
   </ItemDefinitionGroup>
@@ -121,12 +129,13 @@
     </CudaCompile>
     <Lib />
     <CudaLink>
-      <AdditionalOptions>-gencode=arch=compute_61,code=sm_61 -dlto %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-gencode=arch=compute_61,code=sm_61 -dlto -lcudart %(AdditionalOptions)</AdditionalOptions>
     </CudaLink>
     <ProjectReference />
     <ProjectReference />
     <ProjectReference />
     <Lib />
+    <ProjectReference />
     <ProjectReference />
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
