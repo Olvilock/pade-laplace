@@ -78,11 +78,9 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <LinkIncremental>true</LinkIncremental>
     <TargetName>$(SolutionName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <LinkIncremental>false</LinkIncremental>
     <TargetName>$(SolutionName)</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -132,7 +130,7 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);$(CudaToolkitLibDir);</AdditionalLibraryDirectories>
     </Link>
     <CudaCompile>
-      <CodeGeneration>compute_61,sm_61</CodeGeneration>
+      <CodeGeneration>compute_50,sm_50</CodeGeneration>
     </CudaCompile>
     <CudaLink />
     <CudaLink />
@@ -160,11 +158,11 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);$(CudaToolkitLibDir);</AdditionalLibraryDirectories>
     </Link>
     <CudaCompile>
-      <CodeGeneration>compute_61,lto_61</CodeGeneration>
+      <CodeGeneration>compute_50,lto_50</CodeGeneration>
       <AdditionalOptions>-dc %(AdditionalOptions)</AdditionalOptions>
     </CudaCompile>
     <CudaLink>
-      <AdditionalOptions>-gencode=arch=compute_61,code=sm_61 -dlto %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-gencode=arch=compute_50,code=sm_50 -dlto %(AdditionalOptions)</AdditionalOptions>
     </CudaLink>
   </ItemDefinitionGroup>
   <ItemGroup>

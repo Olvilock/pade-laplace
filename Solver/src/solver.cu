@@ -48,7 +48,7 @@ namespace pl
 		std::vector<thrust::complex<double> > h_grid
 		{
 			{ 5.0, 0.0 },
-			//{ 3.0, 0.0 },
+			{ 3.0, 0.0 },
 			//{ 3.0, 10.0 }
 		};
 		thrust::device_vector<thrust::complex<double> > d_grid = h_grid;
