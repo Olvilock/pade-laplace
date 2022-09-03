@@ -129,7 +129,7 @@
     </CudaCompile>
     <Lib />
     <CudaLink>
-      <AdditionalOptions>-gencode=arch=compute_61,code=sm_61 -dlto -lcudart %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>-gencode=arch=compute_61,code=sm_61 -dlto %(AdditionalOptions)</AdditionalOptions>
     </CudaLink>
     <ProjectReference />
     <ProjectReference />
