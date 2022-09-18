@@ -10,6 +10,11 @@
     <ClInclude Include="headers\transformTypes.cuh">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="headers\device\pl_slae.cuh" />
+    <ClInclude Include="headers\device\polyroot.cuh" />
+    <ClInclude Include="headers\device\residue.cuh" />
+    <ClInclude Include="headers\device\transform.cuh" />
+    <ClInclude Include="headers\kernel\batchedSolver.cuh" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Header Files">
@@ -20,9 +25,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <CudaCompile Include="src\batchedSolver.cu">
-      <Filter>Source Files</Filter>
-    </CudaCompile>
+    <CudaCompile Include="src\solver.cu" />
+    <CudaCompile Include="src\device\pl_slae.cu" />
+    <CudaCompile Include="src\device\polyroot.cu" />
+    <CudaCompile Include="src\device\residue.cu" />
+    <CudaCompile Include="src\device\transformSplines.cu" />
+    <CudaCompile Include="src\device\transformTrapezia.cu" />
+    <CudaCompile Include="src\kernel\batchedSolver.cu" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\spline.cpp">

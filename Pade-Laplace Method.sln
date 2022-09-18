@@ -4,16 +4,8 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Wrapper", "Wrapper\Wrapper.vcxproj", "{53B97F0A-6159-474A-ABB9-2C63ECCF062C}"
-	ProjectSection(ProjectDependencies) = postProject
-		{2E6E8726-98E7-41C5-8766-920834461E25} = {2E6E8726-98E7-41C5-8766-920834461E25}
-	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Pade-Laplace Solver", "Solver\Solver.vcxproj", "{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}"
-	ProjectSection(ProjectDependencies) = postProject
-		{2E6E8726-98E7-41C5-8766-920834461E25} = {2E6E8726-98E7-41C5-8766-920834461E25}
-	EndProjectSection
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kernels", "Kernels\Kernels.vcxproj", "{2E6E8726-98E7-41C5-8766-920834461E25}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Solver", "Solver\Solver.vcxproj", "{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,14 +31,6 @@ Global
 		{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}.Release|x64.Build.0 = Release|x64
 		{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}.Release|x86.ActiveCfg = Release|x64
 		{1BE38A13-3D45-42F4-B5AE-4BEAFD787D6F}.Release|x86.Build.0 = Release|x64
-		{2E6E8726-98E7-41C5-8766-920834461E25}.Debug|x64.ActiveCfg = Debug|x64
-		{2E6E8726-98E7-41C5-8766-920834461E25}.Debug|x64.Build.0 = Debug|x64
-		{2E6E8726-98E7-41C5-8766-920834461E25}.Debug|x86.ActiveCfg = Debug|x64
-		{2E6E8726-98E7-41C5-8766-920834461E25}.Debug|x86.Build.0 = Debug|x64
-		{2E6E8726-98E7-41C5-8766-920834461E25}.Release|x64.ActiveCfg = Release|x64
-		{2E6E8726-98E7-41C5-8766-920834461E25}.Release|x64.Build.0 = Release|x64
-		{2E6E8726-98E7-41C5-8766-920834461E25}.Release|x86.ActiveCfg = Release|x64
-		{2E6E8726-98E7-41C5-8766-920834461E25}.Release|x86.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

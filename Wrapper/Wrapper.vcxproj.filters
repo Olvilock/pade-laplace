@@ -20,22 +20,14 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="data\N1D1i2T2ms.padelpltxt">
+    <None Include="data\N1D1i2T2ms.txt">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="data\e-1_10.padelpltxt">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="data\e-1_100.padelpltxt">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="data\e-1_1000.padelpltxt">
-      <Filter>Resource Files</Filter>
-    </None>
+    <None Include="data\e-1_1000.txt" />
+    <None Include="data\e-1_100.txt" />
+    <None Include="data\e-1_10.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="data\RC-CR.padelpltxt">
-      <Filter>Resource Files</Filter>
-    </Text>
+    <Text Include="data\RC-CR.txt" />
   </ItemGroup>
 </Project>

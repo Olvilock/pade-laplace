@@ -36,7 +36,7 @@ namespace pl
 	}
 
 	template <>
-	Approximation solveBatched<transformType::Trapezia> (
+	[[nodiscard]] Multiexp solveBatched<transformType::Trapezia> (
 		const dataset_type& h_data, unsigned depth)
 	{
 		thrust::device_vector<DeviceNode> d_data = h_data;
