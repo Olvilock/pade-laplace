@@ -1,19 +1,13 @@
 #include <device/transform.cuh>
 #include <transformTypes.cuh>
 
-namespace pl
-{
+namespace pl {
 	using complex = thrust::complex<double>;
-	
-	namespace
-	{
-		__device__ void set_pow(double base)
-		{
+	namespace {
+		__device__ void set_pow(double base) {
 			extern __shared__ double pow[];
 			pow[threadIdx.x] = 1.0;
-
-			for (int exp = 1; exp < blockDim.x; exp <<= 1)
-			{
+			for (int exp = 1; exp < blockDim.x; exp <<= 1) {
 				if (exp & threadIdx.x)
 					pow[threadIdx.x] *= base;
 				if (exp & (threadIdx.x + blockDim.x))
@@ -24,10 +18,8 @@ namespace pl
 		}
 
 		template <int offset>
-		__device__ complex get_sum(complex s, int power)
-		{
+		__device__ complex get_sum(complex s, int power) {
 			extern __shared__ double point_pow[];
-
 			complex coeff = 1 / s;
 			int next = 1;
 #pragma unroll
@@ -35,8 +27,7 @@ namespace pl
 				coeff *= next++ / s;
 
 			auto res1 = coeff * point_pow[power];
-			for (; power; ++next)
-			{
+			for (; power; ++next) {
 				coeff *= -next / ((next - offset) * s);
 				res1 /= power--;
 				res1 += coeff * point_pow[power];
@@ -46,26 +37,21 @@ namespace pl
 	}
 
 	template<>
-	__device__ thrust::pair<complex, complex> transform (
-		const thrust::complex<double> s,
+	__device__ cuda::std::pair<complex, complex> transform (
+		const cuda::std::complex<double> s,
 		SplineData data)
 	{
-		if (!data.segments_count)
-			return {};
-
+		if (data.segments_count == 0) return {};
 		auto segment = *data.segments++;
 		set_pow(-segment.pivot);
 
 		auto coeff = thrust::exp(-segment.pivot * s);
-		auto res1 = coeff *
-			(get_sum<0>(s, threadIdx.x) * data.left.a +
+		auto res1 = coeff * (get_sum<0>(s, threadIdx.x) * data.left.a +
 				get_sum<1>(s, threadIdx.x) * data.left.b),
-			res2 = coeff *
-			(get_sum<0>(s, threadIdx.x + blockDim.x) * data.left.a +
+			res2 = coeff * (get_sum<0>(s, threadIdx.x + blockDim.x) * data.left.a +
 				get_sum<1>(s, threadIdx.x + blockDim.x) * data.left.b);
 
-		while (--data.segments_count)
-		{
+		while (--data.segments_count) {
 			auto old_cubic = segment.d;
 			segment = *data.segments++;
 
@@ -78,15 +64,12 @@ namespace pl
 			coeff = thrust::exp(-segment.pivot * s);
 		}
 
-		res1 -= coeff *
-			(get_sum<0>(s, threadIdx.x) * data.right.a +
+		res1 -= coeff * (get_sum<0>(s, threadIdx.x) * data.right.a +
 				get_sum<1>(s, threadIdx.x) * data.right.b +
 				get_sum<3>(s, threadIdx.x) * segment.d);
-		res2 -= coeff *
-			(get_sum<0>(s, threadIdx.x + blockDim.x) * data.right.a +
+		res2 -= coeff * (get_sum<0>(s, threadIdx.x + blockDim.x) * data.right.a +
 				get_sum<1>(s, threadIdx.x + blockDim.x) * data.right.b +
 				get_sum<3>(s, threadIdx.x + blockDim.x) * segment.d);
-
 		return { res1, res2 };
 	}
 }

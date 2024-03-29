@@ -1,26 +1,18 @@
-#include <device/pl_slae.cuh>
+#include "taylor_slae.cuh"
+#include <cuda/std/complex.h>
 
-#include <thrust/complex.h>
-
-namespace pl
-{
-	using complex = thrust::complex<double>;
-
-	namespace
-	{
-		__device__ void apply(const int dim, complex vec)
-		{
+namespace pl {
+	using complex = cuda::std::complex<double>;
+	namespace {
+		__device__ void apply(const int dim, complex vec) {
 			extern __shared__ complex error[];
 			complex* roots = error + blockDim.x;
 			const complex* taylor = roots + blockDim.x;
 
-			__syncthreads();
 			roots[threadIdx.x] = {};
 			__syncthreads();
-
 			if (threadIdx.x < dim)
-				for (int id = threadIdx.x + 1; ; ++id)
-				{
+				for (int id = threadIdx.x + 1; ; ++id) {
 					id -= dim * (id == dim);
 					roots[id] += vec * taylor[id + threadIdx.x];
 					
@@ -29,21 +21,17 @@ namespace pl
 				}
 			__syncthreads();
 		}
-		__device__ void reduce(const int dim)
-		{
+
+		__device__ void reduce(const int dim) {
 			extern __shared__ double data[];
-			
-			__syncthreads();
 #pragma unroll
-			for (int id = 512; id; id >>= 1)
-			{
+			for (int id = 512; id; id >>= 1) {
 				if (threadIdx.x + id < dim && threadIdx.x < id)
 					data[threadIdx.x] += data[threadIdx.x + id];
 				__syncthreads();
 			}
 #pragma unroll
-			for (int id = 1; id < blockDim.x; id <<= 1)
-			{
+			for (int id = 1; id < blockDim.x; id <<= 1) {
 				if (threadIdx.x < id && threadIdx.x + id < blockDim.x)
 					data[threadIdx.x + id] = data[threadIdx.x];
 				__syncthreads();
@@ -51,8 +39,7 @@ namespace pl
 		}
 	}
 	
-	__device__ double pl_slae_cg(const int dim, int iter_count)
-	{
+	__device__ double slaeCG(const int dim, int iter_count) {
 		extern __shared__ complex buffer[];
 		complex* result = buffer + blockDim.x;
 		const complex* minus_rhs = result + blockDim.x + dim;
@@ -61,41 +48,36 @@ namespace pl
 			"sizeof(complex) must not be less than sizeof(double)");
 		extern __shared__ double norm[];
 		
-		apply(dim, thrust::conj(-minus_rhs[threadIdx.x]));
-		
-		norm[threadIdx.x] = thrust::norm(result[threadIdx.x]);
+    __syncthreads();
+		apply(dim, cuda::std::conj(-minus_rhs[threadIdx.x]));
+		norm[threadIdx.x] = cuda::std::norm(result[threadIdx.x]);
+    __syncthreads();
 		reduce(dim);
 
-		complex error = thrust::conj(result[threadIdx.x]),
-				basis = error, root{};
-
+		complex error = cuda::std::conj(result[threadIdx.x]), basis = error, root{};
 		auto err_norm = norm[threadIdx.x];
-		
-		while (iter_count--)
-		{
+		while (iter_count--) {
 			if (err_norm < 1e-64)
 				break;
 
+      __syncthreads();
 			apply(dim, basis);
-			
 			if (threadIdx.x < dim)
 				norm[threadIdx.x] = thrust::norm(result[threadIdx.x]);
-			
+      __syncthreads();
 			reduce(dim);
 			apply(dim, thrust::conj(result[threadIdx.x]));
 
 			auto alpha = err_norm / norm[threadIdx.x];
-
 			root += alpha * basis;
 			error -= alpha * thrust::conj(result[threadIdx.x]);
-
 			if (threadIdx.x < dim)
 				norm[threadIdx.x] = thrust::norm(error);
+      __syncthreads();
 			reduce(dim);
 
 			auto beta = norm[threadIdx.x] / err_norm;
 			basis = error + beta * basis;
-			
 			err_norm = norm[threadIdx.x];
 		}
 		/*
