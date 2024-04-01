@@ -9,10 +9,12 @@ namespace fs = std::filesystem;
 
 int main(int argc, char *argv[]) {
   constexpr const char *extension = ".txt";
-  if (argc != 2) {
-    std::cout << "Usage: " << argv[0] << " {infile}\n";
+  if (argc != 3) {
+    std::cout << "Usage: " << argv[0] << " {infile} {count}\n";
     return EXIT_FAILURE;
   }
+
+  const auto count = std::stoul(argv[2]);
 
   fs::path path = argv[1];
   std::cout << "Opening " << path << '\n';
@@ -36,5 +38,5 @@ int main(int argc, char *argv[]) {
 
   std::cout << "Dataset size is " << data.size() << '\n';
   std::cout << std::fixed << std::setprecision(6);
-  pl::fit<pl::Method::Trapezia>(data, 16);
+  pl::fit<pl::Method::Trapezia>(data, count);
 }

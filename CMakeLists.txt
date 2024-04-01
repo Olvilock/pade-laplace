@@ -12,12 +12,14 @@ add_executable(pl-fit src/main.cpp)
 target_link_libraries(pl-fit PRIVATE pade-laplace)
 
 foreach(target pl-fit pade-laplace)
-  set_target_properties(${target} PROPERTIES CUDA_SEPARABLE_COMPILATION ON)
+  set_target_properties(${target} PROPERTIES
+    CUDA_ARCHITECTURES "61"
+    CUDA_SEPARABLE_COMPILATION ON
+    INTERPROCEDURAL_OPTIMIZATION TRUE)
   target_include_directories(${target} PUBLIC include)
   target_compile_features(${target} PUBLIC cxx_std_20 cuda_std_20)
   target_compile_options(${target} PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:
     --extended-lambda
-    --generate-line-info
     --relocatable-device-code=true
     >)
 endforeach()
