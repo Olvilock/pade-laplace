@@ -8,7 +8,7 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 find_package(Boost REQUIRED)
 FILE(GLOB CUDA_sources "src/*.cu" "src/device/*.cu")
 
-add_library(pade-laplace src/spline.cpp ${CUDA_sources})
+add_library(pade-laplace SHARED src/spline.cpp ${CUDA_sources})
 target_include_directories(pade-laplace PUBLIC include ${Boost_INCLUDE_DIR})
 target_compile_options(pade-laplace PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:
   --extended-lambda
