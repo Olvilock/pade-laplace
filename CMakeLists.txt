@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.29)
 project(Pade-Laplace
-  VERSION 0.0.1
+  VERSION 0.0.0
   LANGUAGES CXX CUDA)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -9,11 +9,8 @@ find_package(Boost REQUIRED)
 FILE(GLOB CUDA_sources "src/*.cu" "src/device/*.cu")
 
 add_library(pade-laplace SHARED src/spline.cpp ${CUDA_sources})
-target_include_directories(pade-laplace PUBLIC include ${Boost_INCLUDE_DIR})
-target_compile_options(pade-laplace PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:
-  --extended-lambda
-  --relocatable-device-code=true
-  >)
+target_include_directories(pade-laplace PUBLIC include PRIVATE ${Boost_INCLUDE_DIR})
+target_link_libraries(pade-laplace PRIVATE ${Boost_LIBRARIES})
 
 add_executable(pl-fit src/main.cpp)
 target_include_directories(pl-fit PRIVATE include)
@@ -27,4 +24,7 @@ foreach(target pl-fit pade-laplace)
     CUDA_ARCHITECTURES "61"
     CUDA_SEPARABLE_COMPILATION ON
     INTERPROCEDURAL_OPTIMIZATION TRUE)
+  target_compile_options(${target} PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:
+    --extended-lambda
+    --relocatable-device-code=true >)
 endforeach()
