@@ -26,5 +26,6 @@ foreach(target pl-fit pade-laplace)
     INTERPROCEDURAL_OPTIMIZATION TRUE)
   target_compile_options(${target} PRIVATE $<$<COMPILE_LANGUAGE:CUDA>:
     --extended-lambda
+    --expt-relaxed-constexpr
     --relocatable-device-code=true >)
 endforeach()
