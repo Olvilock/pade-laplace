@@ -17,6 +17,12 @@
     }                                                                          \
   } while (false)
 
+namespace {
+inline std::ostream& operator <<(std::ostream& out, cuda::std::complex<double> num) {
+  return out << (std::complex<double>)num;
+}
+}
+
 namespace pl {
 using complex = cuda::std::complex<double>;
 int operator&(BatchStatus a, BatchStatus b) {
