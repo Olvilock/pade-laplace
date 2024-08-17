@@ -1,16 +1,14 @@
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 3.25)
 project(Pade-Laplace
   VERSION 0.0.0
   LANGUAGES CXX CUDA)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-find_package(Boost REQUIRED)
 FILE(GLOB CUDA_sources "src/*.cu" "src/device/*.cu")
 
 add_library(pade-laplace SHARED src/spline.cpp ${CUDA_sources})
-target_include_directories(pade-laplace PUBLIC include PRIVATE ${Boost_INCLUDE_DIR})
-target_link_libraries(pade-laplace PRIVATE ${Boost_LIBRARIES})
+target_include_directories(pade-laplace PUBLIC include)
 
 add_executable(pl-fit src/main.cpp)
 target_include_directories(pl-fit PRIVATE include)
